@@ -1,0 +1,62 @@
+# Questions
+qgis_plugin_name:
+  type: str
+  help: What is the display name of your QGIS plugin? This is used in documentation and license files.
+  placeholder: My QGIS Plugin
+  validator: "{% if not qgis_plugin_name %}Cannot be empty{% endif %}"
+
+qgis_plugin_description:
+  type: str
+  help: What does your QGIS plugin do? Provide a short description for the plugin metadata and repository README.
+  placeholder: Adds tools for editing spatial datasets.
+  validator: "{% if not qgis_plugin_description %}Cannot be empty{% endif %}"
+
+qgis_plugin_module:
+  type: str
+  help: What should be used as the plugin's Python module name (used as the plugin folder name in src folder) name?
+  default: "{{ qgis_plugin_name | replace(' ', '_') | replace('-', '_') | lower }}"
+  validator: "{% if not qgis_plugin_module %}Cannot be empty{% endif %}"
+
+plugin_metadata_author:
+  type: str
+  help: Who is the author of this plugin (written to metadata.txt)?
+
+plugin_metadata_email:
+  type: str
+  help: What is the author's email address (written to metadata.txt)?
+
+plugin_metadata_repository_url:
+  type: str
+  help: What is the URL of the plugin's source code repository (written to metadata.txt)?
+
+insert_copyright_header:
+  type: bool
+  help: Include copyright headers in generated source files?
+  default: true
+
+setup_translations:
+  type: bool
+  help: Enable translation support for the plugin?
+  default: true
+
+lang_key_for_translations:
+  type: str
+  help: What is the target language code for translations (for example, fi, de, or fr)?
+  placeholder: fi
+  when: "{{ setup_translations }}"
+  validator: "{% if not lang_key_for_translations %}Cannot be empty{% endif %}"
+
+# Computed values
+copyright_year:
+  type: str
+  default: "{{ copyright_year | default('%Y' | strftime) }}"
+  when: false
+
+workspace_file_name:
+  type: str
+  default: "{{ qgis_plugin_module | replace('_', '-') | lower }}"
+  when: false
+
+_subdirectory: template
+
+_min_copier_version: "9.10.0"
