@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "{{ qgis_plugin_module | replace('_', '-') | lower }}"
-requires-python = ">=3.12,<3.14"
+requires-python = ">=3.12,<3.14" # Why <3.14? Linux uses system python and sometimes it is python 3.14
 dynamic = [
   "version",
 ]
@@ -53,7 +53,7 @@ lint = [
     "flake8-pyproject>=1.2.4",
     "flake8-spellcheck>=0.28.0",
     # Stubs for type checks
-    "PyQt5-stubs==5.15.6.0",
+    "PyQt5-stubs==5.15.6.0", # What about QGIS >=4?
 ]
 
 [tool.ruff]
