@@ -57,7 +57,11 @@ repos:
     hooks:
       - id: mypy
         additional_dependencies:
+          {%- if qgis_version == 'QGIS3' %}
           - PyQt5-stubs==5.15.6.0
+          {%- else %}
+          - PyQt6-stubs==20250824
+          {%- endif %}
 
   - repo: https://github.com/nlsfi/qgis-plugin-dev-tools
     rev: v0.12.0
