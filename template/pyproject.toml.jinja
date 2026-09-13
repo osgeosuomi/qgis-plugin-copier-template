@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "{{ qgis_plugin_module | replace('_', '-') | lower }}"
-requires-python = ">=3.12,<3.14"
+requires-python = ">={{ python_version }}"
 dynamic = [
   "version",
 ]
@@ -47,6 +47,9 @@ dev = [
     "debugpy==1.5.1",
     # Testing
     "pytest>=9.1.1",
+    "pytest-qt",
+    "pytest-qgis",
+    "pytest-mock",
     # Tools
     "qgis-plugin-dev-tools",
     "copier",
@@ -62,11 +65,15 @@ lint = [
     "flake8-pyproject>=1.2.4",
     "flake8-spellcheck>=0.28.0",
     # Stubs for type checks
+    {%- if qgis_version == 'QGIS3' %}
     "PyQt5-stubs==5.15.6.0",
+    {%- else %}
+    "PyQt6-stubs==20250824",
+    {%- endif %}
 ]
 
 [tool.ruff]
-target-version = "py312"
+target-version = "py{{ python_version | replace('.', '') }}"
 line-length = 88
 
 lint.ignore = [
@@ -95,8 +102,7 @@ lint.unfixable = [
 
 # Avoid flagging (and removing) `SC200` from any `# noqa`
 # directives, despite Ruff's lack of support for `flake8-spellcheck`.
-# Also, select QGIS3 compatible rules for now (QGS2 are for QGIS4).
-lint.external = ["SC200", "QGS1"]
+lint.external = ["SC200", {% if qgis_version == 'QGIS3' %}"QGS1"{% else %}"QGS"{% endif %}]
 
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
@@ -135,7 +141,7 @@ per-file-ignores = [
 ]
 
 [tool.mypy]
-python_version = "3.12"
+python_version = "{{ python_version }}"
 follow_imports = "normal"
 show_column_numbers = true
 check_untyped_defs = true

@@ -17,6 +17,23 @@ qgis_plugin_module:
   default: "{{ qgis_plugin_name | replace(' ', '_') | replace('-', '_') | lower }}"
   validator: "{% if not qgis_plugin_module %}Cannot be empty{% endif %}"
 
+qgis_version:
+  type: str
+  help: What is the target QGIS version?
+  default: QGIS4
+  choices:
+    - QGIS3
+    - QGIS4
+
+python_version:
+  type: str
+  help: Which python version is used?
+  default: 3.12
+  choices:
+    - 3.12
+    - 3.13
+    - 3.14
+
 plugin_metadata_author:
   type: str
   help: Who is the author of this plugin (written to metadata.txt)?
