@@ -28,6 +28,15 @@ namespaces = true
 plugin_package_name = "{{ qgis_plugin_module }}"
 runtime_requires = ["qgis_plugin_tools"]
 version_number_source = "distribution"
+{%- if setup_translations %}
+translation_language_codes = [
+  "{{ lang_key_for_translations }}",
+]
+translation_search_paths = [
+  "src/{{ qgis_plugin_module }}",
+]
+translation_destination_path = "src/{{ qgis_plugin_module }}/resources/i18n"
+{%- endif %}
 
 [tool.uv]
 default-groups = ["dev", "lint"]
