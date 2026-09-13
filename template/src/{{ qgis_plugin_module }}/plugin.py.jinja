@@ -24,6 +24,7 @@ import qgis_plugin_tools
 from qgis.utils import iface as utils_iface
 from qgis_plugin_tools.tools import custom_logging
 from qgis_plugin_tools.tools.decorations import log_if_fails
+from qgis.PyQt.QtWidgets import QMessageBox
 {%- if setup_translations %}
 from qgis_plugin_tools.tools.i18n import tr
 {%- endif %}
@@ -62,8 +63,9 @@ class Plugin:
         if hasattr(iface, "initializationCompleted"):
             iface.initializationCompleted.connect(self.iface_initialization_completed)
 
-        if env.IS_DEVELOPMENT_MODE:
+        if bool(env.IS_DEVELOPMENT_MODE):
             self.iface_initialization_completed()
+
         LOGGER.info("Plugin initialized")
 
     def unload(self) -> None:
@@ -77,4 +79,9 @@ class Plugin:
 
         Executed after initializationCompleted signal is emitted.
         """
-        pass
+        # TODO: Replace with actual functionality, this is just for example
+        QMessageBox.information(
+            iface.mainWindow(),
+            "Message",
+            "Hello world",
+        )
