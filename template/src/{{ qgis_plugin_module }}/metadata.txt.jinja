@@ -3,7 +3,10 @@ name={{ qgis_plugin_name }}
 description={{ qgis_plugin_description }}
 about=
 version=0.0.0
-qgisMinimumVersion=3.22
+qgisMinimumVersion=3.40
+{%- if qgis_version == 'QGIS3 & QGIS4' %}
+qgisMaximumVersion=4.99
+{%- endif %}
 icon=
 author={{ plugin_metadata_author }}
 email={{ plugin_metadata_email }}
