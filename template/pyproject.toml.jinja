@@ -1,33 +1,35 @@
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["uv_build>=0.12.15,<0.13"]
+build-backend = "uv_build"
 
 [project]
 name = "{{ qgis_plugin_module | replace('_', '-') | lower }}"
 requires-python = ">={{ python_version }}"
-dynamic = [
-  "version",
-]
+version = "0.0.0.post0"
 readme = "README.md"
 dependencies = [
   "qgis_plugin_tools",
 ]
+build = ["uv"]
 
 [project.entry-points."qgis_plugin_dev_tools"]
 {{ qgis_plugin_module }} = "{{ qgis_plugin_module }}"
 
-[tool.setuptools.dynamic]
-version = { attr = "{{ qgis_plugin_module }}.__version__" }
-
-[tool.setuptools.packages.find]
-where = ["src"]
-include = ["{{ qgis_plugin_module }}*"]
-namespaces = true
+[tool.uv.build-backend]
+module-name = "{{ qgis_plugin_module }}"
+include = [
+  "py.typed",
+  "metadata.txt",
+  "resources/**/*",
+  "**/*.svg",
+  "**/*.ts",
+  "**/*.ui",
+]
 
 [tool.qgis_plugin_dev_tools]
 plugin_package_name = "{{ qgis_plugin_module }}"
 runtime_requires = ["qgis_plugin_tools"]
-version_number_source = "distribution"
+version_number_source = "pyproject"
 {%- if setup_translations %}
 translation_language_codes = [
   "{{ lang_key_for_translations }}",
@@ -54,7 +56,7 @@ dev = [
     "pytest-qgis",
     "pytest-mock",
     # Tools
-    "qgis-plugin-dev-tools",
+    "qgis-plugin-dev-tools>=0.13.0",
     "copier",
 ]
 lint = [

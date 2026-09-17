@@ -10,7 +10,6 @@ from {{ qgis_plugin_module }}.utils import i18n_utils
 if typing.TYPE_CHECKING:
     from {{ qgis_plugin_module }}.plugin import Plugin
 
-__version__ = "0.0.0.post0"
 {%- if setup_translations %}
 
 TRANSLATORS: list[QtCore.QTranslator] = []{% endif %}
