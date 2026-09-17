@@ -1,0 +1,86 @@
+name: PR Test Template build
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: qgis/qgis:${{ matrix.qgis-image-tag }}
+    strategy:
+      matrix:
+        include:
+          - qgis-image-tag: "3.44-noble"
+            qgis-version: "QGIS3"
+          - qgis-image-tag: "4.0-questing"
+            qgis-version: "QGIS3 & QGIS4"
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Create build dir
+        run: mkdir -p "${RUNNER_TEMP}/test-build"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57
+
+      - name: Create venv
+        working-directory: ${{ runner.temp }}/test-build
+        run: |
+          uv venv --system-site-packages
+          uv pip install copier
+
+      - name: Create plugin from template
+        working-directory: ${{ runner.temp }}/test-build
+        run: |
+          PYTHON_VERSION=$(uv run --active python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
+
+          uv run copier copy --defaults --vcs-ref=HEAD \
+            --data 'qgis_plugin_name=Template Plugin' \
+            --data 'qgis_plugin_description=abc' \
+            --data 'plugin_metadata_author=author' \
+            --data 'plugin_metadata_email=author@email' \
+            --data 'plugin_metadata_repository_url=https://my-plugin-repo' \
+            --data "python_version=${PYTHON_VERSION}" \
+            --data "qgis_version=${{ matrix.qgis-version }}" \
+            --data 'insert_copyright_header=true' \
+            --data 'setup_translations=true' \
+            --data 'lang_key_for_translations=fi' \
+            "${GITHUB_WORKSPACE}" .
+
+          uv sync --all-packages --all-groups --active
+
+      - name: Run prek
+        working-directory: ${{ runner.temp }}/test-build
+        run: |
+          git init && git add --all
+          uv run prek update
+          uv run prek run --all-files
+
+      - name: Run example unit tests
+        working-directory: ${{ runner.temp }}/test-build
+        run: uv run pytest test -v --qgis_disable_gui
+
+      - name: Run copier recopy with 'insert_copyright_header=false'
+        if: matrix.qgis-image-tags == '3.44-noble'
+        working-directory: ${{ runner.temp }}/test-build
+        run: |
+          uv run copier recopy --force --vcs-ref=HEAD \
+            --data 'insert_copyright_header=false'
+
+          git add --all
+          uv run prek update
+          uv run prek run --all-files
+
+      - name: Run copier recopy with 'setup_translations=false'
+        if: matrix.qgis-image-tags == '3.44-noble'
+        working-directory: ${{ runner.temp }}/test-build
+        run: |
+          uv run copier recopy --force --vcs-ref=HEAD \
+            --data 'setup_translations=false'
+
+          git add --all
+          uv run prek update
+          uv run prek run --all-files
