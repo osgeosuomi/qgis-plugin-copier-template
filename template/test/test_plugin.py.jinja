@@ -37,7 +37,9 @@ if TYPE_CHECKING:
 
 @pytest.fixture(autouse=True)
 def mock_message_box_ok(mocker: "MockerFixture") -> "MagicMock":
-    return mocker.patch.object(QMessageBox, "information", return_value=QMessageBox.Ok)
+    return mocker.patch.object(
+        QMessageBox, "information", return_value=QMessageBox.StandardButton.Ok
+    )
 
 
 @pytest.fixture
