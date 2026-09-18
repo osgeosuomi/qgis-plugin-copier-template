@@ -1,6 +1,5 @@
 import typing
-{% if setup_translations %}
-from qgis.PyQt import QtCore{% endif %}
+
 from qgis.utils import plugins
 {%- if setup_translations %}
 
@@ -8,11 +7,14 @@ from {{ qgis_plugin_module }}.utils import i18n_utils
 {%- endif %}
 
 if typing.TYPE_CHECKING:
+{%- if setup_translations %}
+    from qgis.PyQt import QtCore
+{% endif %}
     from {{ qgis_plugin_module }}.plugin import Plugin
 
 {%- if setup_translations %}
 
-TRANSLATORS: list[QtCore.QTranslator] = []{% endif %}
+TRANSLATORS: "list[QtCore.QTranslator]" = []{% endif %}
 
 
 def classFactory(_) -> "Plugin":  # noqa: ANN001, N802
