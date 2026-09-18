@@ -45,7 +45,7 @@ jobs:
             --data 'plugin_metadata_repository_url=https://my-plugin-repo' \
             --data "python_version=${PYTHON_VERSION}" \
             --data "qgis_version=${{ matrix.qgis-version }}" \
-            --data 'insert_copyright_header=true' \
+            --data 'insert_copyright_header=false' \
             --data 'setup_translations=true' \
             --data 'lang_key_for_translations=fi' \
             "${GITHUB_WORKSPACE}" .
@@ -63,17 +63,6 @@ jobs:
         working-directory: ${{ runner.temp }}/test-build
         run: uv run pytest test -v --qgis_disable_gui
 
-      - name: Run copier recopy with 'insert_copyright_header=false'
-        if: matrix.qgis-version == 'QGIS3'
-        working-directory: ${{ runner.temp }}/test-build
-        run: |
-          uv run copier recopy --force --vcs-ref=HEAD \
-            --data 'insert_copyright_header=false'
-
-          git add --all
-          uv run prek update
-          uv run prek run --all-files
-
       - name: Run copier recopy with 'setup_translations=false'
         if: matrix.qgis-version == 'QGIS3'
         working-directory: ${{ runner.temp }}/test-build
@@ -83,4 +72,18 @@ jobs:
 
           git add --all
           uv run prek update
+          uv run prek run --all-files
+
+      - name: Run copier recopy with 'insert_copyright_header=true'
+        if: matrix.qgis-version == 'QGIS3'
+        working-directory: ${{ runner.temp }}/test-build
+        run: |
+          uv run copier recopy --force --vcs-ref=HEAD \
+            --data 'insert_copyright_header=true'
+
+          git add --all
+          uv run prek update
+          # Have to insert copyright headers and fix end of file first
+          uv run prek run --all-files insert-license || true && git add --all
+          uv run prek run --all-files end-of-file-fixer || true && git add --all
           uv run prek run --all-files
