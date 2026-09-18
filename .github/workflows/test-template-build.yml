@@ -87,3 +87,10 @@ jobs:
           uv run prek run --all-files insert-license || true && git add --all
           uv run prek run --all-files end-of-file-fixer || true && git add --all
           uv run prek run --all-files
+
+      - name: Ensure the plugin can be built properly
+        if: matrix.qgis-version == 'QGIS3'
+        working-directory: ${{ runner.temp }}/test-build
+        run: |
+          cp .env.example .env
+          uv run --no-editable qgis-plugin-dev-tools build
