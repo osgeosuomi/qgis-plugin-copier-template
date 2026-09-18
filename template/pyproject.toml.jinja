@@ -36,6 +36,9 @@ translation_search_paths = [
   "src/{{ qgis_plugin_module }}",
 ]
 translation_destination_path = "src/{{ qgis_plugin_module }}/resources/i18n"
+{%- if qgis_version != 'QGIS3' %}
+translation_pylupdate_command = "pylupdate6"
+{%- endif %}
 {%- endif %}
 
 [tool.uv]

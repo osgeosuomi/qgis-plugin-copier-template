@@ -57,7 +57,7 @@ jobs:
         run: |
           git init && git add --all
           uv run prek update
-          uv run prek run --all-files --skip update-translations
+          uv run prek run --all-files
 
       - name: Run example unit tests
         working-directory: ${{ runner.temp }}/test-build
