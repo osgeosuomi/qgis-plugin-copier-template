@@ -1,4 +1,4 @@
-name: PR Test Template build
+name: PR Test Template Build
 
 on:
   pull_request:
@@ -64,7 +64,7 @@ jobs:
         run: uv run pytest test -v --qgis_disable_gui
 
       - name: Run copier recopy with 'insert_copyright_header=false'
-        if: matrix.qgis-image-tags == '3.44-noble'
+        if: matrix.qgis-version == 'QGIS3'
         working-directory: ${{ runner.temp }}/test-build
         run: |
           uv run copier recopy --force --vcs-ref=HEAD \
@@ -75,7 +75,7 @@ jobs:
           uv run prek run --all-files
 
       - name: Run copier recopy with 'setup_translations=false'
-        if: matrix.qgis-image-tags == '3.44-noble'
+        if: matrix.qgis-version == 'QGIS3'
         working-directory: ${{ runner.temp }}/test-build
         run: |
           uv run copier recopy --force --vcs-ref=HEAD \
