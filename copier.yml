@@ -76,4 +76,16 @@ workspace_file_name:
 
 _subdirectory: template
 
+_skip_if_exists:
+  - "*.ts"
+  - LICENSE
+  - copyright-header.txt
+  - CHANGELOG.md
+  - README.md
+  - whitelist.txt
+  - .env.example
+  - "src/*/metadata.txt"
+  - "src/*/plugin.py"
+  - "test/test_plugin.py"
+
 _min_copier_version: "9.10.0"
