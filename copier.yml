@@ -17,6 +17,19 @@ qgis_plugin_module:
   default: "{{ qgis_plugin_name | replace(' ', '_') | replace('-', '_') | lower }}"
   validator: "{% if not qgis_plugin_module %}Cannot be empty{% endif %}"
 
+qgis_plugin_class:
+  type: str
+  help: What should be used as the plugin module's class name?
+  default: >-
+    {%- for word in qgis_plugin_name.replace('-', ' ').replace('_', ' ').split() -%}
+    {{ word[0] | upper }}{{ word[1:] }}
+    {%- endfor -%}
+  validator: >-
+    {% if not qgis_plugin_class %}Cannot be empty
+    {%- elif not qgis_plugin_class[0].isupper() or not qgis_plugin_class.isalnum()
+    %}Must be a CamelCase name containing only letters and digits and starting
+    with an uppercase letter{% endif %}
+
 qgis_version:
   type: str
   help: What is the target QGIS version?
