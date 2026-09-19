@@ -52,6 +52,12 @@ repos:
           - flake8-spellcheck==0.28.0
           - flake8-qgis==2.1.0
 
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.9.4
+    hooks:
+      - id: bandit
+        args: [ "-c", "pyproject.toml" ]
+
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev:  v2.3.1
     hooks:
