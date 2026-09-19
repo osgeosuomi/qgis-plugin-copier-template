@@ -37,7 +37,7 @@ repos:
   {%- endif %}
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.16.5
+    rev: v0.16.8
     hooks:
       - id: ruff-check
         args: [ --fix, --exit-non-zero-on-fix, --extend-fixable=F401 ]
@@ -50,7 +50,13 @@ repos:
         additional_dependencies:
           - flake8-pyproject==1.2.4
           - flake8-spellcheck==0.28.0
-          - flake8-qgis==2.0.1
+          - flake8-qgis==2.1.0
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.9.4
+    hooks:
+      - id: bandit
+        args: [ "-c", "pyproject.toml" ]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev:  v2.3.1
@@ -67,6 +73,7 @@ repos:
     rev: v0.13.1
     hooks:
       - id: update-translations
+      - id: normalize-xml
 
   # commit-msg hooks
   # Commit messages should follow [Conventional Commits notation](https://www.conventionalcommits.org/en/v1.0.0/#summary).

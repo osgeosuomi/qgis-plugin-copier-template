@@ -1,6 +1,5 @@
 import typing
-{% if setup_translations %}
-from qgis.PyQt import QtCore{% endif %}
+
 from qgis.utils import plugins
 {%- if setup_translations %}
 
@@ -8,24 +7,27 @@ from {{ qgis_plugin_module }}.utils import i18n_utils
 {%- endif %}
 
 if typing.TYPE_CHECKING:
-    from {{ qgis_plugin_module }}.plugin import Plugin
+{%- if setup_translations %}
+    from qgis.PyQt import QtCore
+{% endif %}
+    from {{ qgis_plugin_module }}.plugin import {{ qgis_plugin_class }}
 
 {%- if setup_translations %}
 
-TRANSLATORS: list[QtCore.QTranslator] = []{% endif %}
+TRANSLATORS: "list[QtCore.QTranslator]" = []{% endif %}
 
 
-def classFactory(_) -> "Plugin":  # noqa: ANN001, N802
+def classFactory(_) -> "{{ qgis_plugin_class }}":  # noqa: ANN001, N802
     """Class factory."""
     {% if setup_translations -%}
     TRANSLATORS.extend(i18n_utils.setup_all_translators())
 
     {% endif -%}
-    from {{ qgis_plugin_module }}.plugin import Plugin  # noqa: PLC0415
+    from {{ qgis_plugin_module }}.plugin import {{ qgis_plugin_class }}  # noqa: PLC0415
 
-    return Plugin()
+    return {{ qgis_plugin_class }}()
 
 
-def get_instance() -> "Plugin | None":
+def get_instance() -> "{{ qgis_plugin_class }} | None":
     """Get instance."""
     return plugins.get(__name__)
