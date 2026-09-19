@@ -147,6 +147,9 @@ per-file-ignores = [
     "test_e2e/*:SC200,QGS",
 ]
 
+[tool.bandit]
+exclude_dirs = ["test"]
+
 [tool.mypy]
 python_version = "{{ python_version }}"
 follow_imports = "normal"
