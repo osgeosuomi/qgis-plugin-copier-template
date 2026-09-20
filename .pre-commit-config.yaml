@@ -30,6 +30,12 @@ repos:
         files: \.md$
         args: [ "--fix" ]
 
+  - repo: https://github.com/Mateusz-Grzelinski/actionlint-py
+    rev: 2f3dbd354aa118b539dee99d8eed05a83097a199  # frozen: v1.7.12.24
+    hooks:
+      - id: actionlint
+        files: workflows/.*\.ya?ml$
+
   # commit-msg hooks
   # Commit messages should follow [Conventional Commits notation](https://www.conventionalcommits.org/en/v1.0.0/#summary).
   - repo: https://github.com/jorisroovers/gitlint
