@@ -23,6 +23,13 @@ repos:
       - id: check-merge-conflict
         args: [--assume-in-merge]
 
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: 5b5dddc4fb0f83c3ea1fc5616fa63e115dce83e0  # frozen: v0.49.1
+    hooks:
+      - id: markdownlint
+        files: \.md$
+        args: [ "--fix" ]
+
   # commit-msg hooks
   # Commit messages should follow [Conventional Commits notation](https://www.conventionalcommits.org/en/v1.0.0/#summary).
   - repo: https://github.com/jorisroovers/gitlint
