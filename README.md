@@ -1,8 +1,10 @@
 # qgis-plugin-copier-template
 
-This template provides a starting point for QGIS plugin development, including a working example plugin that can be used as a base when building your own functionality.
+This template provides a starting point for QGIS plugin development, including
+a working example plugin that can be used as a base when building your own functionality.
 
-The generated project comes preconfigured with modern Python development tools and best practices:
+The generated project comes preconfigured with modern Python development tools
+and best practices:
 
 * **uv** for dependency management
 * **Ruff** for code formatting and linting
@@ -22,7 +24,8 @@ cd my-qgis-plugin
 git init
 ```
 
-Next, create a Python virtual environment which will also be used later in QGIS plugin development.
+Next, create a Python virtual environment which will also be used later in QGIS
+plugin development.
 
 On Linux:
 
@@ -50,40 +53,50 @@ On Windows:
   pip install uv
   ```
 
-Once the virtual environment is ready, activate it, install Copier (check the supported version in [copier.yml](copier.yml)), and run the following command:
+Once the virtual environment is ready, activate it, install Copier (check the
+supported version in [copier.yml](copier.yml)), and run the following command:
 
 ```bash
 pip install copier
 copier copy --answers-file .copier-answers.qgis-plugin.yml https://github.com/osgeosuomi/qgis-plugin-copier-template.git .
 ```
 
-The Copier tool will prompt you for the required values and use them to populate the template. If you want to modify your answers, rerun Copier with:
+The Copier tool will prompt you for the required values and use them to populate
+the template. If you want to modify your answers, rerun Copier with:
 
 ```bash
 copier recopy --answers-file .copier-answers.qgis-plugin.yml .
 ```
 
-After the template has been applied to the target repository, generate the lock file and install the project dependencies::
+After the template has been applied to the target repository, generate the lock
+file and install the project dependencies::
 
 ```bash
 uv sync
 ```
 
-Finally, see the `DEVELOPMENT.md` file in the target repository for instructions on setting up your QGIS plugin development environment.
+Finally, see the `DEVELOPMENT.md` file in the target repository for instructions
+on setting up your QGIS plugin development environment.
 
 ## Applying the template to an existing project
 
-Add Copier (check the supported version in [copier.yml](copier.yml)) as a development dependency in the repository.
+Add Copier (check the supported version in [copier.yml](copier.yml)) as
+adevelopment dependency in the repository.
 
-Apply the template files with the `copier copy` command. On the first run, the tool will prompt for required values.
+Apply the template files with the `copier copy` command. On the first run, the
+tool will prompt for required values.
 
-Use the `--answers-file` option and name the configuration file `.copier-answers.qgis-plugin.yml` so that other Copier templates (for example, CI) can also be used in the same repository.
+Use the `--answers-file` option and name the configuration file
+`.copier-answers.qgis-plugin.yml` so that other Copier templates
+(for example CI) can also be used in the same repository.
 
 ```bash
 copier copy --answers-file .copier-answers.qgis-plugin.yml https://github.com/osgeosuomi/qgis-plugin-copier-template.git .
 ```
 
-After answering the prompts, Copier will ask whether it can overwrite existing files (if any found). Answer **yes** to all prompts, then review the Git diff and check that repository-specific customizations are not removed.
+After answering the prompts, Copier will ask whether it can overwrite existing
+files (if any found). Answer **yes** to all prompts, then review the Git diff
+and check that repository-specific customizations are not removed.
 
 If you want to modify your answers, rerun Copier with:
 
@@ -110,11 +123,14 @@ prek install
 
 ### Updating the template
 
-1. Make the required changes in a repository that already uses the template and verify that there are no syntax errors etc.
+1. Make the required changes in a repository that already uses the template and
+verify that there are no syntax errors etc.
 
 2. Apply the same changes to the template repository via a feature branch.
 
-3. Stash the changes made in step 1 and update through the template. Using `--vcs-ref=<branch>` allows testing the against any changes without creating a tag.
+3. Stash the changes made in step 1 and update through the template.
+Using `--vcs-ref=<branch>` allows testing the against any changes without
+creating a tag.
 
     ```bash
     copier update --answers-file .copier-answers.qgis-plugin.yml --vcs-ref=<branch>
@@ -122,7 +138,8 @@ prek install
 
 4. If the update does not work as expected, repeat steps 2 and 3.
 
-5. Once the changes have been validated and merged to `main`, create a new tag in the template repository and document the changes in the tag message.
+5. Once the changes have been validated and merged to `main`, create a new tag
+in the template repository and document the changes in the tag message.
 
     ```bash
     git tag -a v0.1.0
@@ -132,7 +149,9 @@ prek install
     git push --tags
     ```
 
-6. Run `copier update` once more in the target repository from step 1, this time **without** `--vcs-ref=HEAD`. This updates `.copier-answers.qgis-plugin.yml` to the latest tag. Squash or rebase the changes into a single commit, for example:
+6. Run `copier update` once more in the target repository from step 1, this time
+**without** `--vcs-ref=HEAD`. This updates `.copier-answers.qgis-plugin.yml` to
+the latest tag. Squash or rebase the changes into a single commit, for example:
 
     ```bash
     git commit -m "chore: update from qgis-plugin-copier-template"
