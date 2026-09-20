@@ -25,6 +25,8 @@ jobs:
 
       - name: Install uv
         uses: astral-sh/setup-uv@cec208311dfd045dd5311c1add060b2062131d57
+        with:
+          enable-cache: false
 
       - name: Create venv
         working-directory: ${{ runner.temp }}/test-build
@@ -57,7 +59,13 @@ jobs:
         run: |
           git init && git add --all
           uv run prek update
-          uv run prek run --all-files
+          uv run prek run --all-files || true
+          git restore .pre-commit-config.yaml
+          git diff
+          if ! git diff --quiet; then
+            echo "Prek failed, see git diff above to fix issues!"
+            exit 1
+          fi
 
       - name: Run example unit tests
         working-directory: ${{ runner.temp }}/test-build
@@ -72,7 +80,13 @@ jobs:
 
           git add --all
           uv run prek update
-          uv run prek run --all-files
+          uv run prek run --all-files || true
+          git restore .pre-commit-config.yaml
+          git diff
+          if ! git diff --quiet; then
+            echo "Prek failed, see git diff above to fix issues!"
+            exit 1
+          fi
 
       - name: Run copier recopy with 'insert_copyright_header=true'
         if: matrix.qgis-version == 'QGIS3'
@@ -86,7 +100,13 @@ jobs:
           # Have to insert copyright headers and fix end of file first
           uv run prek run --all-files insert-license || true && git add --all
           uv run prek run --all-files end-of-file-fixer || true && git add --all
-          uv run prek run --all-files
+          uv run prek run --all-files || true
+          git restore .pre-commit-config.yaml
+          git diff
+          if ! git diff --quiet; then
+            echo "Prek failed, see git diff above to fix issues!"
+            exit 1
+          fi
 
       - name: Ensure the plugin can be built properly
         if: matrix.qgis-version == 'QGIS3'

@@ -7,9 +7,7 @@ name = "{{ qgis_plugin_module | replace('_', '-') | lower }}"
 requires-python = ">={{ python_version }}"
 version = "0.0.0.post0"
 readme = "README.md"
-dependencies = [
-  "qgis_plugin_tools",
-]
+dependencies = ["qgis_plugin_tools"]
 build = ["uv"]
 
 [project.entry-points."qgis_plugin_dev_tools"]
@@ -31,12 +29,8 @@ plugin_package_name = "{{ qgis_plugin_module }}"
 runtime_requires = ["qgis_plugin_tools"]
 version_number_source = "pyproject"
 {%- if setup_translations %}
-translation_language_codes = [
-  "{{ lang_key_for_translations }}",
-]
-translation_search_paths = [
-  "src/{{ qgis_plugin_module }}",
-]
+translation_language_codes = ["{{ lang_key_for_translations }}"]
+translation_search_paths = ["src/{{ qgis_plugin_module }}"]
 translation_destination_path = "src/{{ qgis_plugin_module }}/resources/i18n"
 {%- if qgis_version != 'QGIS3' %}
 translation_pylupdate_command = "pylupdate6"
@@ -48,33 +42,33 @@ default-groups = ["dev", "lint"]
 
 [dependency-groups]
 dev = [
-    # Debugging
-    "debugpy==1.5.1",
-    # Testing
-    "pytest>=9.1.1",
-    "pytest-qt",
-    "pytest-qgis",
-    "pytest-mock",
-    # Tools
-    "qgis-plugin-dev-tools>=0.13.0",
-    "copier",
+  # Debugging
+  "debugpy==1.5.1",
+  # Testing
+  "pytest>=9.1.1",
+  "pytest-qt",
+  "pytest-qgis",
+  "pytest-mock",
+  # Tools
+  "qgis-plugin-dev-tools>=0.13.0",
+  "copier",
 ]
 lint = [
-    # Linting and formatting (ensure precommit yaml has same versions)
-    "prek>=0.5.1",
-    "ruff>=0.16.8",
-    "mypy>=2",
-    "flake8>=7.3.0",
-    # flake8 plugins
-    "flake8-qgis>=2.1.0",
-    "flake8-pyproject>=1.2.4",
-    "flake8-spellcheck>=0.28.0",
-    # Stubs for type checks
-    {%- if qgis_version == 'QGIS3' %}
-    "PyQt5-stubs==5.15.6.0",
-    {%- else %}
-    "PyQt6-stubs==20250824",
-    {%- endif %}
+  # Linting and formatting (ensure precommit yaml has same versions)
+  "prek>=0.5.1",
+  "ruff>=0.16.8",
+  "mypy>=2",
+  "flake8>=7.3.0",
+  # flake8 plugins
+  "flake8-qgis>=2.1.0",
+  "flake8-pyproject>=1.2.4",
+  "flake8-spellcheck>=0.28.0",
+  # Stubs for type checks
+  {%- if qgis_version == 'QGIS3' %}
+  "PyQt5-stubs==5.15.6.0",
+  {%- else %}
+  "PyQt6-stubs==20250824",
+  {%- endif %}
 ]
 
 [tool.ruff]
@@ -82,29 +76,29 @@ target-version = "py{{ python_version | replace('.', '') }}"
 line-length = 88
 
 lint.ignore = [
-    "FIX", # flake8-fixme
-    "TD002", # Missing author in TODO
-    "D100", # Missing docstring in public module
-    "D104", # Missing docstring in public package
-    "D105", # Missing docstring in magic method
-    "D107", # Missing docstring in `__init__`
-    {%- if not insert_copyright_header %}
-    "CPY", # flake8-copyright (CPY)
-    {%- endif %}
-    # Conflicting rules (formatter)
-    "D203", # one-blank-line-before-class, D211 used (no-blank-line-before-class)
-    "D213", # multi-line-summary-second-line, D212 used (multi-line-summary-first-line)
-    "COM812", # missing-trailing-comma (formatter will enforce this)
-    "ISC001", # single-line-implicit-string-concatenation
-    "UP037", # quoted-annotation (quoted annotations are used with TYPE_CHECKING imports)
+  "FIX",   # flake8-fixme
+  "TD002", # Missing author in TODO
+  "D100",  # Missing docstring in public module
+  "D104",  # Missing docstring in public package
+  "D105",  # Missing docstring in magic method
+  "D107",  # Missing docstring in `__init__`
+  {%- if not insert_copyright_header %}
+  "CPY",   # flake8-copyright (CPY)
+  {%- endif %}
+  # Conflicting rules (formatter)
+  "D203",   # one-blank-line-before-class, D211 used (no-blank-line-before-class)
+  "D213",   # multi-line-summary-second-line, D212 used (multi-line-summary-first-line)
+  "COM812", # missing-trailing-comma (formatter will enforce this)
+  "ISC001", # single-line-implicit-string-concatenation
+  "UP037",  # quoted-annotation (quoted annotations are used with TYPE_CHECKING imports)
 ]
 
 # List of all rules https://docs.astral.sh/ruff/rules/
 lint.select = ["ALL"]
 
 lint.unfixable = [
-    "F401", # Unused imports
-    "F841", # Unused variables
+  "F401", # Unused imports
+  "F841", # Unused variables
 ]
 
 # Avoid flagging (and removing) `SC200` from any `# noqa`
@@ -119,21 +113,21 @@ known-first-party = ["{{ qgis_plugin_module }}"]
 
 [tool.ruff.lint.per-file-ignores]
 "{test,test_integration,test_e2e}/*" = [
-    "INP001",
-    "D", # pydocstyle
-    "DTZ", # flake8-datetimez
-    "FBT", # flake8-boolean-trap
-    "TD", # flake8-todos
-    "S", # flake8-bandit
-    "SLF", # flake8-self
-    "ANN201", # Missing return type annotation for public function
-    "E501", # Line too long
-    "C901", # Function is too complex
-    "PLR2004", # Magic value used in comparison, consider replacing `2000` with a constant variable
-    "PLR0912", # Too many branches
-    "PLR0913", # Too many arguments in function definition
-    "PLR0915", # Too many statements
-    "ARG001", # Unused function argument
+  "INP001",
+  "D",       # pydocstyle
+  "DTZ",     # flake8-datetimez
+  "FBT",     # flake8-boolean-trap
+  "TD",      # flake8-todos
+  "S",       # flake8-bandit
+  "SLF",     # flake8-self
+  "ANN201",  # Missing return type annotation for public function
+  "E501",    # Line too long
+  "C901",    # Function is too complex
+  "PLR2004", # Magic value used in comparison, consider replacing `2000` with a constant variable
+  "PLR0912", # Too many branches
+  "PLR0913", # Too many arguments in function definition
+  "PLR0915", # Too many statements
+  "ARG001",  # Unused function argument
 ]
 
 [tool.flake8]
@@ -142,9 +136,9 @@ spellcheck-targets = "names"
 dictionaries = "en_US,python,technical"
 select = ["SC", {% if qgis_version == 'QGIS3' %}"QGS1"{% else %}"QGS"{% endif %}]
 per-file-ignores = [
-    "test/*:SC200,QGS",
-    "test_integration/*:SC200,QGS",
-    "test_e2e/*:SC200,QGS",
+  "test/*:SC200,QGS",
+  "test_integration/*:SC200,QGS",
+  "test_e2e/*:SC200,QGS",
 ]
 
 [tool.bandit]
