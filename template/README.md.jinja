@@ -4,7 +4,11 @@
 
 ## Development
 
+{% if monorepo_component -%}
+See the development instructions of the repository root.
+{%- else -%}
 See [development readme](./DEVELOPMENT.md).
+{%- endif %}
 {%- if setup_translations %}
 
 ### Translating with QT Linguistic

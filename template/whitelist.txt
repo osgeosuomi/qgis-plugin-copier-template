@@ -1,6 +1,0 @@
-i18n
-iface
-qgis
-teardown
-truthy
-utils

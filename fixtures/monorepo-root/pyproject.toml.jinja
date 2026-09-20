@@ -1,0 +1,72 @@
+{% import "includes/plugin_lint.jinja" as plugin_lint with context -%}
+# Repository root that satisfies the generated test/test_monorepo_root.py, used by
+# the monorepo test build.
+[project]
+name = "monorepo-root"
+version = "0.0.0"
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.uv]
+package = false
+default-groups = ["dev", "lint"]
+
+[tool.uv.workspace]
+members = ["components/*"]
+
+[dependency-groups]
+dev = ["pytest>=9.1.1"]
+lint = [
+  "prek>=0.5.1",
+  "ruff>=0.16.5",
+  "mypy>=2",
+  "flake8>=7.3.0",
+  "flake8-pyproject>=1.2.4",
+  "flake8-spellcheck>=0.28.0",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+lint.ignore = [{{ plugin_lint.as_toml(plugin_lint.RUFF_LINT_IGNORE) }}
+]
+
+# List of all rules https://docs.astral.sh/ruff/rules/
+lint.select = ["ALL"]
+
+lint.unfixable = [
+  "F401", # Unused imports
+  "F841", # Unused variables
+]
+
+lint.external = ["SC200"]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.per-file-ignores]
+"**/test/*" = [{{ plugin_lint.as_toml(plugin_lint.RUFF_TEST_IGNORE) }}
+]
+
+[tool.flake8]
+max-line-length = 88
+spellcheck-targets = "names"
+dictionaries = "en_US,python,technical"
+select = ["SC"]
+per-file-ignores = ["*/test/*:SC200"]
+
+[tool.bandit]
+exclude_dirs = ["test"]
+
+[tool.mypy]
+python_version = "3.12"
+follow_imports = "normal"
+show_column_numbers = true
+check_untyped_defs = true
+explicit_package_bases = true
+mypy_path = "components/plugin/src"
+
+[tool.pytest.ini_options]
+minversion = "9.0"
+addopts = "--import-mode=importlib"

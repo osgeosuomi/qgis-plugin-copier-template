@@ -1,0 +1,162 @@
+{% import "includes/plugin_lint.jinja" as plugin_lint with context -%}
+{% import "includes/hooks.jinja" as hooks with context -%}
+"""Checks that the shared configuration of the repository root fits this component."""
+
+import tomllib
+from fnmatch import fnmatch
+from pathlib import Path
+
+import pytest
+
+PLUGIN_DIR = "{{ plugin_dir }}"
+PLUGIN_MODULE = "{{ qgis_plugin_module }}"
+COMPONENT = Path(__file__).parents[1]
+ROOT = COMPONENT / "{{ root_rel }}"
+
+REQUIRED_RUFF_IGNORES = [{{ plugin_lint.as_python(plugin_lint.RUFF_LINT_IGNORE) }}
+]
+REQUIRED_WHITELIST_WORDS = {{ plugin_lint.SPELLCHECK_WORDS | tojson }}
+
+# Hooks expected from the root, the component only runs the plugin specific ones
+ROOT_HOOKS = [{{ hooks.root_hook_ids_python() }}
+]
+
+TEST_FILE = f"{PLUGIN_DIR}/test/test_plugin.py"
+TEST_IGNORES = [{{ plugin_lint.as_python(plugin_lint.RUFF_TEST_IGNORE) }}
+]
+REFERENCE_ROOT = (
+    "https://github.com/osgeosuomi/qgis-plugin-copier-template"
+    "/tree/main/fixtures/monorepo-root"
+)
+HELP = f"See {REFERENCE_ROOT} for a repository root that satisfies these tests."
+
+
+def read_config(path: Path) -> dict:
+    if not path.exists():
+        return {}
+    with path.open("rb") as file:
+        return tomllib.load(file)  # noqa: SC200
+
+
+def matches(pattern: str, path: str) -> bool:
+    """Glob match, expanding one level of {a,b} braces."""
+    before, brace, rest = pattern.partition("{")
+    if not brace:
+        return fnmatch(path, pattern)
+    options, _, after = rest.partition("}")
+    return any(fnmatch(path, before + option + after) for option in options.split(","))
+
+
+@pytest.fixture(scope="module")
+def root_config() -> dict:
+    return read_config(ROOT / "pyproject.toml")
+
+
+@pytest.fixture(scope="module")
+def ruff_config(root_config: dict) -> dict:
+    ruff = root_config.get("tool", {}).get("ruff", {})
+    if not ruff:
+        pytest.skip("Reported by test_root_configures_ruff")
+    return ruff
+
+
+def test_root_has_a_pyproject(root_config: dict) -> None:
+    assert root_config, f"No pyproject.toml in the repository root ({ROOT}). {HELP}"
+
+
+def test_root_configures_ruff(root_config: dict) -> None:
+    assert root_config.get("tool", {}).get("ruff"), (
+        f"[tool.ruff] is missing from the repository root, but the component "
+        f"inherits it with extend. {HELP}"
+    )
+
+
+def test_component_is_a_workspace_member(root_config: dict) -> None:
+    workspace = root_config.get("tool", {}).get("uv", {}).get("workspace", {})
+    members = workspace.get("members", [])
+    assert any(matches(member, PLUGIN_DIR) for member in members), (
+        f"[tool.uv.workspace] members does not cover {PLUGIN_DIR!r}. {HELP}"
+    )
+
+
+def test_ruff_ignores_rules_the_plugin_relies_on(ruff_config: dict) -> None:
+    lint = ruff_config.get("lint", {})
+    if "ALL" not in lint.get("select", []):
+        pytest.skip("The root does not select all ruff rules")
+
+    ignored = lint.get("ignore", [])
+    missing = [code for code in REQUIRED_RUFF_IGNORES if code not in ignored]
+    assert not missing, f"[tool.ruff] lint.ignore is missing {missing}. {HELP}"
+
+
+def test_ruff_ignores_the_test_directory(ruff_config: dict) -> None:
+    per_file_ignores = ruff_config.get("lint", {}).get("per-file-ignores", {})
+    assert any(matches(pattern, TEST_FILE) for pattern in per_file_ignores), (
+        f"[tool.ruff.lint.per-file-ignores] has no pattern matching {TEST_FILE!r}. "
+        f"Ignore {TEST_IGNORES} for the test files. {HELP}"
+    )
+
+
+def test_spellcheck_whitelists_the_plugin_words(root_config: dict) -> None:
+    flake8 = root_config.get("tool", {}).get("flake8", {})
+    if "SC" not in flake8.get("select", []):
+        pytest.skip("The root does not run flake8-spellcheck")
+
+    whitelist = ROOT / "whitelist.txt"
+    words = whitelist.read_text().split() if whitelist.exists() else []
+    missing = [word for word in REQUIRED_WHITELIST_WORDS if word not in words]
+    assert not missing, f"whitelist.txt of the root is missing {missing}. {HELP}"
+
+
+def test_flake8_ignores_the_test_directory(root_config: dict) -> None:
+    flake8 = root_config.get("tool", {}).get("flake8", {})
+    if not flake8:
+        pytest.skip("The root does not configure flake8")
+
+    patterns = [entry.split(":")[0] for entry in flake8.get("per-file-ignores", [])]
+    assert any(matches(pattern, TEST_FILE) for pattern in patterns), (
+        f"[tool.flake8] per-file-ignores has no pattern matching {TEST_FILE!r}. {HELP}"
+    )
+
+
+def test_mypy_resolves_the_component_sources(root_config: dict) -> None:
+    mypy = root_config.get("tool", {}).get("mypy", {})
+    if not mypy:
+        pytest.skip("The root does not configure mypy")
+
+    mypy_path = mypy.get("mypy_path", [])
+    mypy_path = [mypy_path] if isinstance(mypy_path, str) else mypy_path
+    assert mypy.get("explicit_package_bases"), (
+        f"[tool.mypy] explicit_package_bases is not enabled. {HELP}"
+    )
+    assert f"{PLUGIN_DIR}/src" in mypy_path, (
+        f"[tool.mypy] mypy_path does not contain {PLUGIN_DIR + '/src'!r}. {HELP}"
+    )
+
+
+def test_root_runs_the_generic_hooks() -> None:
+    config = ROOT / ".pre-commit-config.yaml"
+    assert config.exists(), f"No .pre-commit-config.yaml in the repository root. {HELP}"
+
+    content = config.read_text()
+    missing = [
+        alternatives
+        for alternatives in ROOT_HOOKS
+        if not any(f"id: {hook}" in content for hook in alternatives)
+    ]
+    assert not missing, (
+        f"The root .pre-commit-config.yaml does not run {missing}. {HELP}"
+    )
+
+
+def test_changelog_of_the_root_exists() -> None:
+    plugin_config = read_config(COMPONENT / "pyproject.toml")
+    tool_config = plugin_config.get("tool", {}).get("qgis_plugin_dev_tools", {})
+    changes_file = tool_config.get("changelog_file_path")
+    if not changes_file:
+        pytest.skip("No changelog configured for the plugin")
+
+    assert (COMPONENT / changes_file).exists(), (
+        f"{changes_file!r} does not exist, but is configured as the "
+        f"changelog_file_path of the plugin. {HELP}"
+    )

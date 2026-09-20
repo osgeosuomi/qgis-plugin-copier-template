@@ -30,6 +30,25 @@ qgis_plugin_class:
     %}Must be a CamelCase name containing only letters and digits and starting
     with an uppercase letter{% endif %}
 
+monorepo_component:
+  type: bool
+  help: |
+    Is the plugin a component of a monorepo (a uv workspace member)?
+    Only the plugin component is generated, the repository root is left to the wider project.
+  default: false
+
+plugin_dir:
+  type: str
+  help: Where does the plugin component live, relative to the repository root?
+  default: components/plugin
+  when: "{{ monorepo_component }}"
+  validator: >-
+    {% if not plugin_dir %}Cannot be empty
+    {%- elif plugin_dir.startswith('/') %}Must be a path relative to the repository root
+    {%- elif '..' in plugin_dir.split('/') %}Must not contain '..'
+    {%- elif plugin_dir.strip('/') in ['', '.'] %}Must be a subdirectory of the repository root
+    {%- endif %}
+
 qgis_version:
   type: str
   help: What is the target QGIS version?
@@ -86,6 +105,19 @@ workspace_file_name:
   type: str
   default: "{{ qgis_plugin_module | replace('_', '-') | lower }}"
   when: false
+
+root_rel:
+  type: str
+  default: "{% if monorepo_component %}{{ ('../' * (plugin_dir.strip('/').split('/') | length)) | trim('/') }}{% else %}.{% endif %}"
+  when: false
+
+_message_after_copy: |
+  {% if monorepo_component -%}
+  The shared configuration at the repository root is not generated. Run
+  `pytest test/test_monorepo_root.py` in {{ plugin_dir }} to see what it still needs.
+
+  Later updates: `copier update` inside {{ plugin_dir }}.
+  {%- endif %}
 
 _subdirectory: template
 

@@ -112,6 +112,34 @@ When the template is updated, apply changes to the target repository with:
 copier update --answers-file .copier-answers.qgis-plugin.yml --skip-answered
 ```
 
+## Using the template for a plugin component of a monorepo
+
+Answer **yes** to `monorepo_component` when the plugin is one component (uv
+workspace member) of a larger repository, and run Copier with the component
+directory as the destination:
+
+```bash
+copier copy --answers-file .copier-answers.qgis-plugin.yml \
+  https://github.com/osgeosuomi/qgis-plugin-copier-template.git components/plugin
+```
+
+Only the plugin component is generated, never files owned by the wider project.
+The answers file is stored in the component directory, so updates are run there
+too:
+
+```bash
+cd components/plugin
+copier update --answers-file .copier-answers.qgis-plugin.yml --skip-answered
+```
+
+The component expects the shared configuration to live at the repository root: the
+uv workspace, ruff (inherited with `extend`), mypy, pytest, the flake8-spellcheck
+whitelist, the generic pre-commit hooks and the `CHANGELOG.md` and `.env` that
+`[tool.qgis_plugin_dev_tools]` reads. The generated `test/test_monorepo_root.py`
+reports what is still missing from the root, and
+[fixtures/monorepo-root](fixtures/monorepo-root) is a root that satisfies those
+tests.
+
 ## Template development
 
 Create a python virtual environment and install `prek`:
@@ -120,6 +148,18 @@ Create a python virtual environment and install `prek`:
 pip install prek
 prek install
 ```
+
+### Testing the template locally
+
+`make` generates plugins from the template into `./tmp` and runs prek, the example
+tests and the plugin build against them. `make mono` does that for a component in
+the [fixtures](fixtures) monorepo root.
+
+### Lint rules of the generated plugin
+
+The ruff rules the generated plugin relies on, and its flake8-spellcheck words, are
+defined in [includes/plugin_lint.jinja](includes/plugin_lint.jinja) and rendered
+into the plugin configuration and into the monorepo root tests.
 
 ### Updating the template
 

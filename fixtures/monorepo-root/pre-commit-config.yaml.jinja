@@ -1,0 +1,14 @@
+{%- import "includes/hooks.jinja" as hooks with context -%}
+# Generic hooks of a monorepo root, the plugin specific ones are in the component.
+default_stages: [pre-commit]
+default_install_hook_types: [pre-commit, commit-msg]
+
+repos:
+{{- hooks.standard() }}
+{{ hooks.taplo() }}
+{{ hooks.markdownlint() }}
+{{ hooks.ruff() }}
+{{ hooks.flake8(["flake8-spellcheck==0.28.0"]) }}
+{{ hooks.bandit() }}
+{{ hooks.mypy() }}
+{{ hooks.gitlint() }}

@@ -1,0 +1,143 @@
+{#-
+  pre-commit hooks of the generated plugin and of the monorepo root fixture, so that
+  the revisions are kept in one place. Import with context.
+-#}
+
+{%- set PRE_COMMIT_HOOKS_REV = "v6.0.0" -%}
+{%- set TAPLO_REV = "ade0f95ddcf661c697d4670d2cfcbe95d0048a0a  # frozen: v0.9.3" -%}
+{%- set MARKDOWNLINT_REV = "5b5dddc4fb0f83c3ea1fc5616fa63e115dce83e0  # frozen: v0.49.1" -%}
+{%- set INSERT_LICENSE_REV = "v1.5.6" -%}
+{%- set RUFF_REV = "v0.16.8" -%}
+{%- set FLAKE8_REV = "7.3.0" -%}
+{%- set BANDIT_REV = "1.9.4" -%}
+{%- set MYPY_REV = "v2.3.1" -%}
+{%- set QGIS_PLUGIN_DEV_TOOLS_REV = "v0.13.1" -%}
+{%- set GITLINT_REV = "v0.19.1" -%}
+
+{#- Hooks a monorepo root is expected to run, alternative ids in the same group -#}
+{%- set ROOT_HOOK_IDS = [
+    ["trailing-whitespace"],
+    ["end-of-file-fixer"],
+    ["ruff", "ruff-check"],
+    ["ruff-format"],
+    ["mypy"],
+] -%}
+
+{% macro root_hook_ids_python() %}
+{%- for alternatives in ROOT_HOOK_IDS %}
+    {{ alternatives | tojson }},
+{%- endfor %}
+{%- endmacro %}
+
+{% macro standard() %}
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: {{ PRE_COMMIT_HOOKS_REV }}
+    hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        name: LF for all files
+        args: [--fix=lf]
+        exclude: '\.bat$'
+      - id: mixed-line-ending
+        name: CRLF for windows scripts
+        args: [--fix=crlf]
+        files: '\.bat$'
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+      - id: check-merge-conflict
+        args: [--assume-in-merge]
+{%- endmacro %}
+
+{% macro taplo() %}
+  # TOML files
+  - repo: https://github.com/ComPWA/taplo-pre-commit
+    rev: {{ TAPLO_REV }}
+    hooks:
+      - id: taplo-format
+{%- endmacro %}
+
+{% macro markdownlint() %}
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: {{ MARKDOWNLINT_REV }}
+    hooks:
+      - id: markdownlint
+        files: \.md$
+        args: [ "--fix" ]
+{%- endmacro %}
+
+{% macro insert_license() %}
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: {{ INSERT_LICENSE_REV }}
+    hooks:
+      - id: insert-license  # Insert a short license disclaimer as a header comment in source files
+        files: \.py$
+        args:
+          - --license-filepath
+          - copyright-header.txt
+          - --use-current-year
+{%- endmacro %}
+
+{% macro ruff() %}
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: {{ RUFF_REV }}
+    hooks:
+      - id: ruff-check
+        args: [ --fix, --exit-non-zero-on-fix, --extend-fixable=F401 ]
+      - id: ruff-format
+{%- endmacro %}
+
+{% macro flake8(plugins) %}
+  - repo: https://github.com/PyCQA/flake8
+    rev: {{ FLAKE8_REV }}
+    hooks:
+      - id: flake8
+        additional_dependencies:
+          - flake8-pyproject==1.2.4
+          {%- for plugin in plugins %}
+          - {{ plugin }}
+          {%- endfor %}
+{%- endmacro %}
+
+{% macro bandit() %}
+  - repo: https://github.com/PyCQA/bandit
+    rev: {{ BANDIT_REV }}
+    hooks:
+      - id: bandit
+        args: [ "-c", "pyproject.toml" ]
+{%- endmacro %}
+
+{% macro mypy() %}
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev:  {{ MYPY_REV }}
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          {%- if qgis_version == 'QGIS3' %}
+          - PyQt5-stubs==5.15.6.0
+          {%- else %}
+          - PyQt6-stubs==20250824
+          {%- endif %}
+{%- endmacro %}
+
+{% macro qgis_plugin_dev_tools(translations) %}
+  - repo: https://github.com/nlsfi/qgis-plugin-dev-tools
+    rev: {{ QGIS_PLUGIN_DEV_TOOLS_REV }}
+    hooks:
+      {%- if translations %}
+      - id: update-translations
+      {%- endif %}
+      - id: normalize-xml
+{%- endmacro %}
+
+{% macro gitlint() %}
+  # commit-msg hooks
+  # Commit messages should follow [Conventional Commits notation](https://www.conventionalcommits.org/en/v1.0.0/#summary).
+  - repo: https://github.com/jorisroovers/gitlint
+    rev: {{ GITLINT_REV }}
+    hooks:
+      - id: gitlint
+        stages: [ commit-msg ]
+{%- endmacro %}
