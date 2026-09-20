@@ -120,4 +120,22 @@ jobs:
         working-directory: ${{ runner.temp }}/test-build
         run: |
           cp .env.example .env
+          rm -rf dist
           uv run --no-editable qgis-plugin-dev-tools build
+
+      - name: Scan the plugin build
+        if: matrix.qgis-version == 'QGIS3'
+        working-directory: ${{ runner.temp }}/test-build
+        run: |
+          mkdir -p build_scan
+          python3 -m zipfile -e dist/*.zip build_scan/
+          # Scan for high severity only (-lll), matching qgis policy
+          # https://plugins.qgis.org/docs/security-scanning/tools
+          uv run bandit -r build_scan/ -lll
+
+      - name: Smoke test the plugin build
+        if: matrix.qgis-version == 'QGIS3'
+        working-directory: ${{ runner.temp }}/test-build
+        run: |
+          PYTHONPATH=build_scan python3 -c \
+            "from template_plugin.plugin import TemplatePlugin"
