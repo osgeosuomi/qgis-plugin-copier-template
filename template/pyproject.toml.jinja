@@ -140,7 +140,7 @@ known-first-party = ["{{ qgis_plugin_module }}"]
 max-line-length = 88
 spellcheck-targets = "names"
 dictionaries = "en_US,python,technical"
-select = ["SC", "QGS"]
+select = ["SC", {% if qgis_version == 'QGIS3' %}"QGS1"{% else %}"QGS"{% endif %}]
 per-file-ignores = [
     "test/*:SC200,QGS",
     "test_integration/*:SC200,QGS",
