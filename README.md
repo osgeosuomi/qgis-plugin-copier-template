@@ -26,16 +26,29 @@ Next, create a Python virtual environment which will also be used later in QGIS 
 
 On Linux:
 
-* Install [uv](https://docs.astral.sh/uv/) if not already available: `pip install uv`
+* Install [uv](https://docs.astral.sh/uv/) if not already available:
+
+  ```bash
+  pip install uv
+  ```
+
 * Create a Python virtual environment with access to the libraries provided by
   the QGIS installation:
-  `uv venv .venv --system-site-packages`
+
+  ```bash
+  uv venv .venv --system-site-packages
+  ```
 
 On Windows:
 
 * You can use the [qgis-venv-creator tool](https://github.com/GispoCoding/qgis-venv-creator)
   to make sure the virtual environment is configured correctly for QGIS
-* Install `uv` to the virtual environment: `pip install uv`
+* Install `uv` to the virtual environment:
+
+  ```bash
+  python -m pip install --upgrade pip
+  pip install uv
+  ```
 
 Once the virtual environment is ready, activate it, install Copier (check the supported version in [copier.yml](copier.yml)), and run the following command:
 
@@ -53,7 +66,6 @@ copier recopy --answers-file .copier-answers.qgis-plugin.yml .
 After the template has been applied to the target repository, generate the lock file and install the project dependencies::
 
 ```bash
-uv lock
 uv sync
 ```
 
