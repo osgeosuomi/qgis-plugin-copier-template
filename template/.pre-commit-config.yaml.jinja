@@ -39,6 +39,13 @@ repos:
       - id: markdownlint
         files: \.md$
         args: [ "--fix" ]
+  {%- if github_workflows %}
+
+  - repo: https://github.com/Mateusz-Grzelinski/actionlint-py
+    rev: 2f3dbd354aa118b539dee99d8eed05a83097a199  # frozen: v1.7.12.24
+    hooks:
+      - id: actionlint
+  {%- endif %}
 
   {%- if insert_copyright_header %}
 
