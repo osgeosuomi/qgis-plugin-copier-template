@@ -23,6 +23,20 @@ repos:
       - id: check-added-large-files
       - id: check-merge-conflict
         args: [--assume-in-merge]
+
+  # TOML files
+  - repo: https://github.com/ComPWA/taplo-pre-commit
+    rev: ade0f95ddcf661c697d4670d2cfcbe95d0048a0a  # frozen: v0.9.3
+    hooks:
+      - id: taplo-format
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: 5b5dddc4fb0f83c3ea1fc5616fa63e115dce83e0  # frozen: v0.49.1
+    hooks:
+      - id: markdownlint
+        files: \.md$
+        args: [ "--fix" ]
+
   {%- if insert_copyright_header %}
 
   - repo: https://github.com/Lucas-C/pre-commit-hooks
