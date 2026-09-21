@@ -66,7 +66,7 @@ plugin_metadata_repository_url:
   type: str
   help: What is the URL of the plugin's source code repository (written to metadata.txt)?
 
-github_workflows:
+add_github_workflows:
   type: bool
   help: Add GitHub Actions workflows for the plugin?
   default: "{{ not is_monorepo_component and 'github.com' in plugin_metadata_repository_url }}"
