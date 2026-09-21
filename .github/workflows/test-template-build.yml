@@ -20,15 +20,20 @@ jobs:
         include:
           - qgis-image-tag: "3.44-noble"
             qgis-version: "QGIS3"
+            plugin-dir: "."
           - qgis-image-tag: "4.0-questing"
             qgis-version: "QGIS3 & QGIS4"
+            plugin-dir: "."
+          - qgis-image-tag: "3.44-noble"
+            qgis-version: "QGIS3"
+            plugin-dir: "components/plugin"
       fail-fast: false
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Create build dir
-        run: mkdir -p "${RUNNER_TEMP}/test-build"
+        run: mkdir -p "${RUNNER_TEMP}/test-build/${{ matrix.plugin-dir }}"
 
       - name: Install uv
         uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
@@ -41,8 +46,24 @@ jobs:
           uv venv --system-site-packages
           uv pip install copier
 
-      - name: Create plugin from template
+      - name: Create a minimal monorepo root
+        if: matrix.plugin-dir != '.'
         working-directory: ${{ runner.temp }}/test-build
+        run: |
+          cat > pyproject.toml <<'EOF'
+          [tool.uv.workspace]
+          members = ["components/*"]
+          EOF
+          cat > .pre-commit-config.yaml <<'EOF'
+          repos:
+            - repo: https://github.com/pre-commit/pre-commit-hooks
+              rev: v6.0.0
+              hooks:
+                - id: end-of-file-fixer
+          EOF
+
+      - name: Create plugin from template
+        working-directory: ${{ runner.temp }}/test-build/${{ matrix.plugin-dir }}
         run: |
           PYTHON_VERSION=$(uv run --active python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
 
@@ -57,6 +78,7 @@ jobs:
             --data 'insert_copyright_header=false' \
             --data 'setup_translations=true' \
             --data 'lang_key_for_translations=fi' \
+            --data "is_monorepo_component=${{ matrix.plugin-dir != '.' }}" \
             "${GITHUB_WORKSPACE}" .
 
           uv sync --all-packages --all-groups --active
@@ -67,7 +89,7 @@ jobs:
           git init && git add --all
           uv run prek update
           uv run prek run --all-files || true
-          git restore .pre-commit-config.yaml
+          git restore ':(glob)**/.pre-commit-config.yaml'
           git diff
           if ! git diff --quiet; then
             echo "Prek failed, see git diff above to fix issues!"
@@ -75,12 +97,12 @@ jobs:
           fi
 
       - name: Run example unit tests
-        working-directory: ${{ runner.temp }}/test-build
+        working-directory: ${{ runner.temp }}/test-build/${{ matrix.plugin-dir }}
         run: uv run pytest test -v --qgis_disable_gui
 
       - name: Run copier recopy with 'setup_translations=false'
         if: matrix.qgis-version == 'QGIS3'
-        working-directory: ${{ runner.temp }}/test-build
+        working-directory: ${{ runner.temp }}/test-build/${{ matrix.plugin-dir }}
         run: |
           uv run copier recopy --force --vcs-ref=HEAD \
             --data 'setup_translations=false'
@@ -97,7 +119,7 @@ jobs:
 
       - name: Run copier recopy with 'insert_copyright_header=true'
         if: matrix.qgis-version == 'QGIS3'
-        working-directory: ${{ runner.temp }}/test-build
+        working-directory: ${{ runner.temp }}/test-build/${{ matrix.plugin-dir }}
         run: |
           uv run copier recopy --force --vcs-ref=HEAD \
             --data 'insert_copyright_header=true'
@@ -117,7 +139,7 @@ jobs:
 
       - name: Ensure the plugin can be built properly
         if: matrix.qgis-version == 'QGIS3'
-        working-directory: ${{ runner.temp }}/test-build
+        working-directory: ${{ runner.temp }}/test-build/${{ matrix.plugin-dir }}
         run: |
           cp .env.example .env
           rm -rf dist
@@ -125,7 +147,7 @@ jobs:
 
       - name: Scan the plugin build
         if: matrix.qgis-version == 'QGIS3'
-        working-directory: ${{ runner.temp }}/test-build
+        working-directory: ${{ runner.temp }}/test-build/${{ matrix.plugin-dir }}
         run: |
           mkdir -p build_scan
           python3 -m zipfile -e dist/*.zip build_scan/
@@ -135,7 +157,7 @@ jobs:
 
       - name: Smoke test the plugin build
         if: matrix.qgis-version == 'QGIS3'
-        working-directory: ${{ runner.temp }}/test-build
+        working-directory: ${{ runner.temp }}/test-build/${{ matrix.plugin-dir }}
         run: |
           PYTHONPATH=build_scan python3 -c \
             "from template_plugin.plugin import TemplatePlugin"

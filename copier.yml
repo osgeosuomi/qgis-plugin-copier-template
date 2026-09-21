@@ -30,6 +30,13 @@ qgis_plugin_class:
     %}Must be a CamelCase name containing only letters and digits and starting
     with an uppercase letter{% endif %}
 
+is_monorepo_component:
+  type: bool
+  help: |
+    Is the plugin a component of a monorepo (a uv workspace member)?
+    Only the plugin component is generated, the repository root is left to the wider project.
+  default: false
+
 qgis_version:
   type: str
   help: What is the target QGIS version?
@@ -62,7 +69,8 @@ plugin_metadata_repository_url:
 github_workflows:
   type: bool
   help: Add GitHub Actions workflows for the plugin?
-  default: "{{ 'github.com' in plugin_metadata_repository_url }}"
+  default: "{{ not is_monorepo_component and 'github.com' in plugin_metadata_repository_url }}"
+  when: "{{ not is_monorepo_component }}"
 
 insert_copyright_header:
   type: bool
@@ -92,7 +100,22 @@ workspace_file_name:
   default: "{{ qgis_plugin_module | replace('_', '-') | lower }}"
   when: false
 
+_message_after_copy: |
+  {%- if is_monorepo_component %}
+  Add this directory to [tool.uv.workspace] members of the repository root.
+
+  Later updates: `copier update` inside this directory.
+  {%- endif %}
+
 _subdirectory: template
+
+_exclude:
+  - |
+    {%- if is_monorepo_component %}
+    .editorconfig
+    .gitlint
+    *.code-workspace
+    {%- endif %}
 
 _skip_if_exists:
   - "*.ts"

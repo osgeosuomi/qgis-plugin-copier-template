@@ -62,6 +62,7 @@ For more information about the development workflow, see the [qgis-plugin-dev-to
 This project uses [uv](https://docs.astral.sh/uv/concepts/projects/dependencies/) for
 dependency management.
 
+{% if not is_monorepo_component -%}
 ## Code quality and style
 
 The included `{{ workspace_file_name }}.code-workspace` file is preconfigured for
@@ -73,6 +74,7 @@ VS Code and provides recommended settings for:
 * Test execution
 * Recommended extensions
 
+{% endif -%}
 ## Commit message convention
 
 Commit messages should follow the
