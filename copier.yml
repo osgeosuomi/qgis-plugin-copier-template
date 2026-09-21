@@ -72,6 +72,14 @@ add_github_workflows:
   default: "{{ not is_monorepo_component and 'github.com' in plugin_metadata_repository_url }}"
   when: "{{ not is_monorepo_component }}"
 
+min_code_coverage:
+  type: int
+  help: |
+    What is the minimum code coverage percentage required for the test workflow to pass?
+    Set to 0 to always pass the code coverage check.
+  default: 80
+  when: "{{ add_github_workflows }}"
+
 insert_copyright_header:
   type: bool
   help: Include copyright headers in generated source files?
