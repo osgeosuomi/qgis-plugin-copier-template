@@ -46,6 +46,7 @@ dev = [
   "debugpy==1.5.1",
   # Testing
   "pytest>=9.1.1",
+  "pytest-cov",
   "pytest-qt",
   "pytest-qgis",
   "pytest-mock",
@@ -150,3 +151,17 @@ python_version = "{{ python_version }}"
 follow_imports = "normal"
 show_column_numbers = true
 check_untyped_defs = true
+
+[tool.coverage.paths]
+source = ["src", "**/site-packages"]
+
+[tool.coverage.run]
+branch = true
+source_pkgs = ["{{ qgis_plugin_module }}"]
+
+[tool.coverage.report]
+exclude_also = [
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+  "raise NotImplementedError",
+]
