@@ -112,6 +112,37 @@ When the template is updated, apply changes to the target repository with:
 copier update --answers-file .copier-answers.qgis-plugin.yml --skip-answered
 ```
 
+## Using the template for a plugin component of a monorepo
+
+Answer **yes** to `is_monorepo_component` when the plugin is one component (uv
+workspace member) of a larger repository, and run Copier with the component
+directory as the destination:
+
+```bash
+copier copy --answers-file .copier-answers.qgis-plugin.yml \
+  https://github.com/osgeosuomi/qgis-plugin-copier-template.git components/plugin
+```
+
+Only the plugin component is generated, never files owned by the wider project
+(`.editorconfig`, `.gitlint`, VS Code workspace, GitHub workflows). The
+component is self-contained and only needs to be listed in
+`[tool.uv.workspace] members` of the root `pyproject.toml`.
+
+The component's `.pre-commit-config.yaml` is discovered by prek as a
+[nested project](https://prek.j178.dev/reference/workspace/). It is generated
+as `orphan`, so the root hooks do not run on the component and the root
+configuration does not need to know about it. Configuration shared with the
+root, such as `[tool.ruff] extend` or `changelog_file_path`, is edited into the
+generated files and kept by updates.
+
+The answers file is stored in the component directory, so updates are run there
+too:
+
+```bash
+cd components/plugin
+copier update --answers-file .copier-answers.qgis-plugin.yml --skip-answered
+```
+
 ## Template development
 
 Create a python virtual environment and install `prek`:

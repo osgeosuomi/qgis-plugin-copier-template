@@ -10,3 +10,4 @@ venv.bak/
 
 # Local template test builds
 tmp/
+.idea/

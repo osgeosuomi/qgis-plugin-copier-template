@@ -2,6 +2,11 @@
 # See https://pre-commit.com/hooks.html for more hooks
 default_stages: [pre-commit]
 default_install_hook_types: [pre-commit, commit-msg]
+{%- if is_monorepo_component %}
+
+# The component runs its own hooks, remove this to run the repository root hooks on it too
+orphan: true
+{%- endif %}
 
 default_language_version:
   python: python{{ python_version }}
@@ -98,6 +103,7 @@ repos:
     hooks:
       - id: update-translations
       - id: normalize-xml
+  {%- if not is_monorepo_component %}
 
   # commit-msg hooks
   # Commit messages should follow [Conventional Commits notation](https://www.conventionalcommits.org/en/v1.0.0/#summary).
@@ -106,3 +112,4 @@ repos:
     hooks:
       - id: gitlint
         stages: [ commit-msg ]
+  {%- endif %}
