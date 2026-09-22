@@ -43,6 +43,7 @@ repos:
     hooks:
       - id: markdownlint
         files: \.md$
+        exclude: CHANGELOG\.md
         args: [ "--fix" ]
   {%- if add_github_workflows %}
 
