@@ -19,3 +19,19 @@ exclude_commit_patterns = [
   '''build\((?!deps\): .+)''',
   '''Initial [Cc]ommit.*''',
 ]
+
+[semantic_release.branches.main]
+match = "(main)"
+prerelease = false
+
+[semantic_release.remote]
+type = "github"
+token = { env = "GITHUB_TOKEN" }
+ignore_token_for_push = true
+
+[semantic_release.commit_parser_options]
+minor_tags = ["feat"]
+patch_tags = ["fix"]
+
+# Triggered if any breaking change is found
+major_tags = []

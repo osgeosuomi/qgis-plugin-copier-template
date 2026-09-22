@@ -20,6 +20,8 @@ jobs:
   test:
     uses: ./.github/workflows/test-template-build.yml
 
+  # Adapted from:
+  # https://github.com/dxvidparham/psr-deploy-keys-for-protected-branches
   release:
     needs: [style, test]
 
@@ -32,18 +34,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
           ref: ${{ github.ref_name }}
 
-      - name: Force release branch to be at workflow sha
+      - name: Configure git
         run: |
-          git reset --hard ${{ github.sha }}
+          git config --local user.email "github-actions@github.com"
+          git config --local user.name "GitHub Actions"
 
-      - name: Run python-semantic-release
-        id: release
-        uses: python-semantic-release/python-semantic-release@9a026e9303981c866c3425723009becb2437c757 # v10.6.2
+      - name: Force release branch to be at workflow SHA
+        run: git reset --hard ${{ github.sha }}
+
+      - name: Setup SSH Agent
+        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          config_file: releaserc.toml
+          ssh-private-key: ${{ secrets.DEPLOY_KEY }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+
+      - name: Run Python Semantic Release
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: uv run --with python-semantic-release python-semantic-release --config releaserc.toml version
 
       - name: Publish release
         uses: python-semantic-release/publish-action@6d89e2de8d40ecb3717316ecbbf15a6fa8ea9039 # v10.6.2
@@ -53,4 +67,6 @@ jobs:
           tag: ${{ steps.release.outputs.tag }}
 
     outputs:
-      released: ${{ steps.release.outputs.released || 'false' }}
+      released: ${{ steps.release.outputs.released }}
+      version: ${{ steps.release.outputs.version }}
+      tag: ${{ steps.release.outputs.tag }}
