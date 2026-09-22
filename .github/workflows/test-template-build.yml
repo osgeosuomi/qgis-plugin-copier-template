@@ -2,6 +2,9 @@ name: PR Test Template Build
 
 on:
   pull_request:
+  push:
+    branches:
+      - main
 
 permissions:
   contents: read
