@@ -2,15 +2,13 @@ name: PR Test Template Build
 
 on:
   pull_request:
-  push:
-    branches:
-      - main
+  workflow_call:
 
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-test-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
