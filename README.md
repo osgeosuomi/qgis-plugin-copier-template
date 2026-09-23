@@ -69,7 +69,7 @@ copier recopy --answers-file .copier-answers.qgis-plugin.yml .
 ```
 
 After the template has been applied to the target repository, generate the lock
-file and install the project dependencies::
+file and install the project dependencies:
 
 ```bash
 uv sync
@@ -81,7 +81,7 @@ on setting up your QGIS plugin development environment.
 ## Applying the template to an existing project
 
 Add Copier (check the supported version in [copier.yml](copier.yml)) as
-adevelopment dependency in the repository.
+a development dependency in the repository.
 
 Apply the template files with the `copier copy` command. On the first run, the
 tool will prompt for required values.
@@ -160,7 +160,7 @@ verify that there are no syntax errors etc.
 2. Apply the same changes to the template repository via a feature branch.
 
 3. Stash the changes made in step 1 and update through the template.
-Using `--vcs-ref=<branch>` allows testing the against any changes without
+Using `--vcs-ref=<branch>` allows testing against any changes without
 creating a tag.
 
     ```bash
