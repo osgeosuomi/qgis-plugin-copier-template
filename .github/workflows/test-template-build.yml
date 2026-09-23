@@ -73,7 +73,7 @@ jobs:
             --data 'qgis_plugin_about=abcdefg' \
             --data 'plugin_metadata_author=author' \
             --data 'plugin_metadata_email=author@email' \
-            --data 'plugin_metadata_repository_url=https://my-plugin-repo' \
+            --data 'plugin_metadata_repository_url=https://github.com/my-organization/my-plugin' \
             --data "qgis_version=${{ matrix.qgis-version }}" \
             --data 'insert_copyright_header=false' \
             --data 'setup_translations=true' \
