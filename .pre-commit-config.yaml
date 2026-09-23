@@ -34,7 +34,7 @@ repos:
         args: [ "--fix" ]
 
   - repo: https://github.com/Mateusz-Grzelinski/actionlint-py
-    rev: 2f3dbd354aa118b539dee99d8eed05a83097a199  # frozen: v1.7.12.24
+    rev: 805f85e558841bf4d852335e036b33d2b26be1cc  # frozen: v1.7.12.25
     hooks:
       - id: actionlint
         files: workflows/.*\.ya?ml$
