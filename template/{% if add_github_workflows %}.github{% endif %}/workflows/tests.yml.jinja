@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  pytest:
+  test:
     runs-on: ubuntu-latest
     container:
       image: qgis/qgis:{% raw %}${{ matrix.qgis-image-tag }}{% endraw %}

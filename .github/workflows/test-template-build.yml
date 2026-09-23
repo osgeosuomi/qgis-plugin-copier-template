@@ -1,4 +1,4 @@
-name: PR Test Template Build
+name: Tests
 
 on:
   pull_request:
@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  template-build:
     runs-on: ubuntu-latest
     container:
       image: qgis/qgis:${{ matrix.qgis-image-tag }}
