@@ -42,7 +42,7 @@ jobs:
       - name: Run tests
         run: |
           uv sync --all-packages --no-group lint --locked --active
-          uv run pytest test -v --qgis_disable_gui --cov --cov-report=xml
+          uv run pytest -v --qgis_disable_gui --cov --cov-report=xml
 
       - name: Check code coverage for changed lines
         if: {% raw %}${{ matrix.qgis-image-tag == '3.44-noble' }}{% endraw %}
