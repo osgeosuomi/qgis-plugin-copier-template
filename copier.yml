@@ -109,11 +109,21 @@ workspace_file_name:
   when: false
 
 _message_after_copy: |
-  {%- if is_monorepo_component %}
+  {% if is_monorepo_component -%}
   Add this directory to [tool.uv.workspace] members of the repository root.
 
   Later updates: `copier update` inside this directory.
-  {%- endif %}
+
+  {% endif -%}
+  Set up the development environment (see DEVELOPMENT.md for details):
+
+      uv sync
+      uv run prek install
+
+_message_after_update: |
+  Sync the environment with the updated dependencies:
+
+      uv sync
 
 _subdirectory: template
 
