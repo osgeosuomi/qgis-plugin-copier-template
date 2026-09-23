@@ -145,45 +145,4 @@ copier update --answers-file .copier-answers.qgis-plugin.yml --skip-answered
 
 ## Template development
 
-Create a python virtual environment and install `prek`:
-
-```bash
-pip install prek
-prek install
-```
-
-### Updating the template
-
-1. Make the required changes in a repository that already uses the template and
-verify that there are no syntax errors etc.
-
-2. Apply the same changes to the template repository via a feature branch.
-
-3. Stash the changes made in step 1 and update through the template.
-Using `--vcs-ref=<branch>` allows testing against any changes without
-creating a tag.
-
-    ```bash
-    copier update --answers-file .copier-answers.qgis-plugin.yml --vcs-ref=<branch>
-    ```
-
-4. If the update does not work as expected, repeat steps 2 and 3.
-
-5. Once the changes have been validated and merged to `main`, create a new tag
-in the template repository and document the changes in the tag message.
-
-    ```bash
-    git tag -a v0.1.0
-
-    # Document the changes to tag message
-
-    git push --tags
-    ```
-
-6. Run `copier update` once more in the target repository from step 1, this time
-**without** `--vcs-ref=HEAD`. This updates `.copier-answers.qgis-plugin.yml` to
-the latest tag. Squash or rebase the changes into a single commit, for example:
-
-    ```bash
-    git commit -m "chore: update from qgis-plugin-copier-template"
-    ```
+See [development readme](./docs/DEVELOPMENT.md).
