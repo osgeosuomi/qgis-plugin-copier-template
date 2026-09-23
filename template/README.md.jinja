@@ -7,10 +7,10 @@
 See [development readme](./DEVELOPMENT.md).
 {%- if setup_translations %}
 
-### Translating with QT Linguistic
+### Translating with Qt Linguist
 
 The translation files are in [i18n](./src/{{ qgis_plugin_module }}/resources/i18n)
-folder. Translatable content in python files is code such as `tr(u"Hello World")`.
+folder. Translatable content in python files is code such as `tr("Hello World")`.
 
 Translation files can be updated with `qpdt transup` or wait them to be updated
 automatically with "update-translations" pre-commit hook.
