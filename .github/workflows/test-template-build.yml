@@ -67,8 +67,6 @@ jobs:
       - name: Create plugin from template
         working-directory: ${{ runner.temp }}/test-build/${{ matrix.plugin-dir }}
         run: |
-          PYTHON_VERSION=$(uv run --active python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
-
           uv run copier copy --defaults --vcs-ref=HEAD \
             --data 'qgis_plugin_name=Template Plugin' \
             --data 'qgis_plugin_description=abc' \
@@ -76,7 +74,6 @@ jobs:
             --data 'plugin_metadata_author=author' \
             --data 'plugin_metadata_email=author@email' \
             --data 'plugin_metadata_repository_url=https://my-plugin-repo' \
-            --data "python_version=${PYTHON_VERSION}" \
             --data "qgis_version=${{ matrix.qgis-version }}" \
             --data 'insert_copyright_header=false' \
             --data 'setup_translations=true' \
