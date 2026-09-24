@@ -11,6 +11,12 @@ qgis_plugin_description:
   placeholder: Adds tools for editing spatial datasets.
   validator: "{% if not qgis_plugin_description %}Cannot be empty{% endif %}"
 
+qgis_plugin_about:
+  type: str
+  help: Longer description of your QGIS plugin for metadata.txt
+  placeholder: "{{ qgis_plugin_description }}"
+  validator: "{% if not qgis_plugin_about %}Cannot be empty{% endif %}"
+
 qgis_plugin_module:
   type: str
   help: What should be used as the plugin's Python module name (used as the plugin folder name in src folder) name?
