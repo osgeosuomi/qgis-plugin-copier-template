@@ -6,12 +6,13 @@ on:
     branches:
       - main
       - master
+  workflow_call:
 
 permissions:
   contents: read
 
 concurrency:
-  group: {% raw %}${{ github.workflow }}-${{ github.ref }}{% endraw %}
+  group: {% raw %}${{ github.workflow }}-test-${{ github.ref }}{% endraw %}
   cancel-in-progress: true
 
 jobs:
