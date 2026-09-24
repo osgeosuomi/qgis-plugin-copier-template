@@ -71,6 +71,12 @@ plugin_metadata_email:
 plugin_metadata_repository_url:
   type: str
   help: What is the URL of the plugin's source code repository (written to metadata.txt)?
+  placeholder: "https://{{ qgis_plugin_name | replace(' ', '_') | replace('-', '_') | lower }}.com"
+  validator: >-
+    {% if not plugin_metadata_repository_url %}Cannot be empty
+    {%- elif not plugin_metadata_repository_url.startswith('http')
+    %}Must be a URL starting with http{% endif %}
+
 
 add_github_workflows:
   type: bool
