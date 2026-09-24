@@ -2,6 +2,63 @@
 
 <!-- version list -->
 
+## v0.5.0 (2026-09-24)
+
+### Bug Fixes
+
+- **chore**: Remove invalid build key from the project table
+  ([`e576449`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/e576449868a3add186f2e776797eeae9a30ae6c9))
+
+- **lint**: Ignore CHANGELOG.md from markdownlint
+  ([`85b4ca9`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/85b4ca94396bf6eff19439fcb47b0e92f560ad7c))
+
+- **plugin**: Do not ask python version
+  ([`2fb2bdc`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/2fb2bdc759dba7669a02076c13e9f4476b5a50ee))
+
+- **plugin**: Make repository url required
+  ([`04dcc30`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/04dcc30012877e37e365753b73dd9a2ff9bd4ef9))
+
+### Documentation
+
+- Add DEVELOPMENT.md
+  ([`f490464`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/f49046456c69dea55c4b98a6ab54fa277e03878c))
+
+- Fix typos in readme files
+  ([`4db1a0e`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/4db1a0e4410d59d1cc855c49490e33f828136ac6))
+
+### Features
+
+- **chore**: Freeze prek hooks to newest versions
+  ([`58f43da`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/58f43da669161a429f9495c0ee0879206be9e109))
+
+- **chore**: Set debugpy as default debugger and update its version
+  ([`27224ea`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/27224ea826f84be13438606350388e192d1c775f))
+
+- **chore**: Set pytest test path in pyproject.toml
+  ([`ac6a203`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/ac6a203e1daf400c302ccc9afd065e1bac24157e))
+
+- **ci**: Lint commit messages in code style workflow
+  ([`fa8dbdc`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/fa8dbdca3b2e14232afaf5b6fa4a9d15aaee16c5))
+
+- **ci**: Make workflow names more descriptive
+  ([`40d8ffc`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/40d8ffc8e610438cd84a57c2a304d463fa79ff8b))
+
+- **ci**: Run lint and tests before release
+  ([`cccca0d`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/cccca0d3ff07b7e734a4e8fb927cf850f6ad2d95))
+
+- **lint**: Add qgis-stubs for QGIS3 plugins
+  ([`0bf90dc`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/0bf90dccd29313ae4399757546258f32a6c42c13))
+
+- **plugin**: Add a placeholder icon
+  ([`86cd99e`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/86cd99e4ed2544f4ce713f8b52fa9e41b5fb76ff))
+
+- **plugin**: Add question for metadata about text
+  ([`a524dfe`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/a524dfe3e93286f518b332c20ae64335ebc009d5))
+
+- **vscode**: Add QGIS debugpy launch configuration
+  ([`5e895c1`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/5e895c1d734dd704c88c507d747a38a9b3d1ba85))
+
+
 ## v0.4.0 (2026-09-22)
 
 ### Features
