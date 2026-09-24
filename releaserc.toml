@@ -18,6 +18,8 @@ exclude_commit_patterns = [
   '''test(?:\([^)]*?\))?: .+''',
   '''build\((?!deps\): .+)''',
   '''Initial [Cc]ommit.*''',
+  '''docs(?:\([^)]*?\))?: .+''',
+  '''perf(?:\([^)]*?\))?: .+''',
 ]
 
 [semantic_release.branches.main]
