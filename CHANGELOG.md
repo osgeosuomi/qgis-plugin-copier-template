@@ -2,6 +2,26 @@
 
 <!-- version list -->
 
+## v0.6.0 (2026-09-24)
+
+### Features
+
+- **docs**: Add instructions on how to use templates
+  ([`15cd769`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/15cd7696e779188695c0cd15f94eefb3a51803ce))
+
+- **linting**: Add .gitattributes to force LF and help whitelist merge
+  ([`78d4dbe`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/78d4dbeba95e622cce8d28e205e3e861609ca26d))
+
+- **linting**: Add QGIS-related terms to whitelist
+  ([`cdbfb5f`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/cdbfb5f2e7d0bafab12f0a561a5adc117574a9f9))
+
+- **linting**: Add QGIS-related terms to whitelist
+  ([`8a25f4f`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/8a25f4ff9f90e61b8eb9e8cba3be4ad0a1a7ef79))
+
+- **linting**: Keep whitelist sorted and unique
+  ([`64c05ca`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/64c05ca7e365bcd1a268ba1f895149855bf249d2))
+
+
 ## v0.5.0 (2026-09-24)
 
 ### Bug Fixes
