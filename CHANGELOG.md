@@ -2,6 +2,17 @@
 
 <!-- version list -->
 
+## v0.6.1 (2026-09-24)
+
+### Bug Fixes
+
+- **deps**: Update qpdt that fixes translation process
+  ([`c87c07f`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/c87c07f28bb6d292f1734c775b30c798eba54bc1))
+
+- **lint**: Format DEVELOPMENT.md
+  ([`4afe264`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/4afe26435460d6d90f71a9bf9d20118db4abceaa))
+
+
 ## v0.6.0 (2026-09-24)
 
 ### Features
