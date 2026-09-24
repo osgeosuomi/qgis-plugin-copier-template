@@ -72,6 +72,7 @@ jobs:
           uv run copier copy --defaults --vcs-ref=HEAD \
             --data 'qgis_plugin_name=Template Plugin' \
             --data 'qgis_plugin_description=abc' \
+            --data 'qgis_plugin_about=abcdefg' \
             --data 'plugin_metadata_author=author' \
             --data 'plugin_metadata_email=author@email' \
             --data 'plugin_metadata_repository_url=https://my-plugin-repo' \
