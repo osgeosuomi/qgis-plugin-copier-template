@@ -21,7 +21,11 @@ qgis_plugin_module:
   type: str
   help: What should be used as the plugin's Python module name (used as the plugin folder name in src folder) name?
   default: "{{ qgis_plugin_name | replace(' ', '_') | replace('-', '_') | lower }}"
-  validator: "{% if not qgis_plugin_module %}Cannot be empty{% endif %}"
+  validator: >-
+    {% if not qgis_plugin_module %}Cannot be empty
+    {%- elif not qgis_plugin_module.isidentifier()
+    %}Must be a valid Python module name containing only letters, digits and
+    underscores and not starting with a digit{% endif %}
 
 qgis_plugin_class:
   type: str
