@@ -52,13 +52,10 @@ qgis_version:
     - QGIS3 & QGIS4
 
 python_version:
+  # Hardcode minimum Python version to 3.12 for now since even 4.2 ships with py3.12 on Windows
   type: str
-  help: Which python version is used?
-  default: 3.12
-  choices:
-    - 3.12
-    - 3.13
-    - 3.14
+  default: "3.12"
+  when: false
 
 plugin_metadata_author:
   type: str
