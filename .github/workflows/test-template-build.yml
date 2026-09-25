@@ -88,16 +88,7 @@ jobs:
         run: |
           git init && git add --all
           uv run prek update
-          status=0
-          uv run prek run --all-files || status=$?
-          git restore ':(glob)**/.pre-commit-config.yaml'
-          if ! git diff --exit-code; then
-            echo "Prek changed files, see git diff above to fix issues!"
-            status=1
-          elif [ "$status" -ne 0 ]; then
-            echo "Prek failed, see hook output above to fix issues!"
-          fi
-          exit "$status"
+          uv run prek run --show-diff-on-failure --color=always --all-files
 
       - name: Run example unit tests
         working-directory: ${{ runner.temp }}/test-build/${{ matrix.plugin-dir }}
@@ -112,13 +103,7 @@ jobs:
 
           git add --all
           uv run prek update
-          uv run prek run --all-files || true
-          git restore .pre-commit-config.yaml
-          git diff
-          if ! git diff --quiet; then
-            echo "Prek failed, see git diff above to fix issues!"
-            exit 1
-          fi
+          uv run prek run --show-diff-on-failure --color=always --all-files
 
       - name: Run copier recopy with 'insert_copyright_header=true'
         if: matrix.qgis-version == 'QGIS3'
@@ -132,13 +117,7 @@ jobs:
           # Have to insert copyright headers and fix end of file first
           uv run prek run --all-files insert-license || true && git add --all
           uv run prek run --all-files end-of-file-fixer || true && git add --all
-          uv run prek run --all-files || true
-          git restore .pre-commit-config.yaml
-          git diff
-          if ! git diff --quiet; then
-            echo "Prek failed, see git diff above to fix issues!"
-            exit 1
-          fi
+          uv run prek run --show-diff-on-failure --color=always --all-files
 
       - name: Ensure the plugin can be built properly
         if: matrix.qgis-version == 'QGIS3'
