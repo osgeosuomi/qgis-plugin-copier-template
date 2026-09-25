@@ -23,7 +23,7 @@ jobs:
   # Adapted from:
   # https://github.com/dxvidparham/psr-deploy-keys-for-protected-branches
   release:
-    needs: [style, test]
+    needs: [ style, test ]
 
     runs-on: ubuntu-latest
 
