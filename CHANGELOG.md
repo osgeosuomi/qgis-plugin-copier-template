@@ -2,6 +2,17 @@
 
 <!-- version list -->
 
+## v0.6.2 (2026-09-25)
+
+### Bug Fixes
+
+- **chore**: Rename copyright header file
+  ([`3161397`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/3161397308d3b102e194a78a366faad3065df551))
+
+- **lint**: Add yamllint
+  ([`852ef6b`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/852ef6ba2155d9543209a7e5985c1cd48f0b02fb))
+
+
 ## v0.6.1 (2026-09-24)
 
 ### Bug Fixes
