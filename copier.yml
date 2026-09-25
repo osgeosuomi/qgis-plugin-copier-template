@@ -149,6 +149,6 @@ _exclude:
 
 _skip_if_exists:
   - "*.ts"
-  - copyright-header.txt
+  - .copyright-header.txt
 
 _min_copier_version: "9.10.0"
