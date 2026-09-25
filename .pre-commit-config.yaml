@@ -1,29 +1,27 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
-default_stages: [pre-commit]
-default_install_hook_types: [pre-commit, commit-msg]
+default_stages: [ pre-commit ]
+default_install_hook_types: [ pre-commit, commit-msg ]
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
     hooks:
       - id: trailing-whitespace
-        stages: ["pre-commit"]
       - id: end-of-file-fixer
-        stages: ["pre-commit"]
       - id: mixed-line-ending
         name: LF for all files
-        args: [--fix=lf]
+        args: [ --fix=lf ]
         exclude: '\.bat$'
       - id: mixed-line-ending
         name: CRLF for windows scripts
-        args: [--fix=crlf]
+        args: [ --fix=crlf ]
         files: '\.bat$'
       - id: check-yaml
       - id: check-json
       - id: check-added-large-files
       - id: check-merge-conflict
-        args: [--assume-in-merge]
+        args: [ --assume-in-merge ]
       - id: file-contents-sorter
         name: Sort and deduplicate spellcheck whitelist
         files: (^|/)whitelist\.txt$
@@ -35,7 +33,13 @@ repos:
       - id: markdownlint
         files: \.md$
         exclude: CHANGELOG\.md
-        args: [ "--fix" ]
+        args: [ --fix ]
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: cba56bcde1fdd01c1deb3f945e69764c291a6530  # frozen: v1.38.0
+    hooks:
+      - id: yamllint
+        args: [ --strict, -c=.yamllint ]
 
   - repo: https://github.com/Mateusz-Grzelinski/actionlint-py
     rev: 805f85e558841bf4d852335e036b33d2b26be1cc  # frozen: v1.7.12.25
@@ -43,10 +47,15 @@ repos:
       - id: actionlint
         files: workflows/.*\.ya?ml$
 
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: 83d9cd684c87d95d656c1458ef04895a7f1cbd8e  # frozen: v8.30.1
+    hooks:
+      - id: gitleaks
+
   # commit-msg hooks
   # Commit messages should follow [Conventional Commits notation](https://www.conventionalcommits.org/en/v1.0.0/#summary).
   - repo: https://github.com/jorisroovers/gitlint
     rev: acc9d9de6369b76d22cb4167029d2035e8730b98  # frozen: v0.19.1
     hooks:
       - id: gitlint
-        stages: [commit-msg]
+        stages: [ commit-msg ]

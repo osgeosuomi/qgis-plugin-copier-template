@@ -15,7 +15,7 @@ jobs:
     uses: ./.github/workflows/tests.yml
 
   publish:
-    needs: [style, test]
+    needs: [ style, test ]
     name: Publish plugin to QGIS plugin repository
     runs-on: ubuntu-latest
     container:

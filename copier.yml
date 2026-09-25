@@ -78,7 +78,6 @@ plugin_metadata_repository_url:
     {%- elif not plugin_metadata_repository_url.startswith('http')
     %}Must be a URL starting with http{% endif %}
 
-
 add_github_workflows:
   type: bool
   help: Add GitHub Actions workflows for the plugin?

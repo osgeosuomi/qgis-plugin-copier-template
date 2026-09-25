@@ -1,7 +1,7 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
-default_stages: [pre-commit]
-default_install_hook_types: [pre-commit, commit-msg]
+default_stages: [ pre-commit ]
+default_install_hook_types: [ pre-commit, commit-msg ]
 {%- if is_monorepo_component %}
 
 # The component runs its own hooks, remove this to run the repository root hooks on it too
@@ -16,25 +16,25 @@ repos:
     rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
     hooks:
       - id: trailing-whitespace
-        args: [--markdown-linebreak-ext=md]
+        args: [ --markdown-linebreak-ext=md ]
       - id: end-of-file-fixer
       - id: mixed-line-ending
         name: LF for all files
-        args: [--fix=lf]
+        args: [ --fix=lf ]
         exclude: '\.bat$'
       - id: mixed-line-ending
         name: CRLF for windows scripts
-        args: [--fix=crlf]
+        args: [ --fix=crlf ]
         files: '\.bat$'
       - id: check-yaml
       - id: check-json
       - id: check-added-large-files
       - id: check-merge-conflict
-        args: [--assume-in-merge]
+        args: [ --assume-in-merge ]
       - id: file-contents-sorter
         name: Sort and deduplicate spellcheck whitelist
         files: (^|/)whitelist\.txt$
-        args: [--unique]
+        args: [ --unique ]
 
   # TOML files
   - repo: https://github.com/ComPWA/taplo-pre-commit
@@ -48,7 +48,14 @@ repos:
       - id: markdownlint
         files: \.md$
         exclude: CHANGELOG\.md
-        args: [ "--fix" ]
+        args: [ --fix ]
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: cba56bcde1fdd01c1deb3f945e69764c291a6530  # frozen: v1.38.0
+    hooks:
+      - id: yamllint
+        args: [ --strict, -c=.yamllint ]
+
   {%- if add_github_workflows %}
 
   - repo: https://github.com/Mateusz-Grzelinski/actionlint-py
@@ -90,7 +97,7 @@ repos:
     rev: 92ae8b82fb422a639f0ed8d99e96cea769594e08  # frozen: 1.9.4
     hooks:
       - id: bandit
-        args: [ "-c", "pyproject.toml" ]
+        args: [ -c, pyproject.toml ]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: 7ff8d35ae36a7d2b968f2f90b4c723e292e594ee  # frozen: v2.3.1

@@ -18,7 +18,8 @@
             "source.fixAll.markdownlint": "explicit"
         },
         "files.associations": {
-            "*.md.jinja": "markdown"
+            "*.md.jinja": "markdown",
+            ".yamllint": "yaml"
         }
     }
 }
