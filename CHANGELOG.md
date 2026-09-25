@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v0.6.3 (2026-09-25)
+
+### Bug Fixes
+
+- **chore**: Fix references to renamed copyright header file
+  ([`7aec9d2`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/7aec9d2b46f0a2de961423226f81d070ad144d6d))
+
+
 ## v0.6.2 (2026-09-25)
 
 ### Bug Fixes
