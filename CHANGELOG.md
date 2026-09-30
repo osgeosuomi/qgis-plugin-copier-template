@@ -2,6 +2,19 @@
 
 <!-- version list -->
 
+## v0.7.0 (2026-09-30)
+
+### Bug Fixes
+
+- **chore**: Prevent eol normalization from corrupting binaries
+  ([`049a1d8`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/049a1d816e75f7ce043e394e638deface571e046))
+
+### Features
+
+- **chore**: Document the release process
+  ([`4b4f23b`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/4b4f23b5a0a1922c46fb0c71cb36b8307b38db0d))
+
+
 ## v0.6.3 (2026-09-25)
 
 ### Bug Fixes
