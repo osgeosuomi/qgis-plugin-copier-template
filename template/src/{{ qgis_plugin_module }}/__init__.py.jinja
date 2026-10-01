@@ -2,8 +2,7 @@ import typing
 
 from qgis.utils import plugins
 {%- if setup_translations %}
-
-from {{ qgis_plugin_module }}.utils import i18n_utils
+from qgis_plugin_tools.tools import i18n
 {%- endif %}
 
 if typing.TYPE_CHECKING:
@@ -20,7 +19,7 @@ TRANSLATORS: "list[QtCore.QTranslator]" = []{% endif %}
 def classFactory(_) -> "{{ qgis_plugin_class }}":  # noqa: ANN001, N802
     """Class factory."""
     {% if setup_translations -%}
-    TRANSLATORS.extend(i18n_utils.setup_all_translators())
+    TRANSLATORS.extend(i18n.setup_all_translators())
 
     {% endif -%}
     from {{ qgis_plugin_module }}.plugin import {{ qgis_plugin_class }}  # noqa: PLC0415
