@@ -11,11 +11,21 @@ and best practices:
 
 * **uv** for dependency management
 * **Ruff** for code formatting and linting
-* **mypy** for static type checking
-* **Flake8** for additional code quality validation (including QGIS-specific checks)
+* **ty** or **mypy** for static type checking
+* **Flake8** for additional code quality validation (QGIS-specific checks and spellcheck)
+* **Bandit** for security checks
 * **Pytest** setup for automated testing
-* **pre-commit** hooks for running quality checks before commits
+* **prek** hooks for running quality checks before commits
 * **qgis-plugin-dev-tools** for developing and packaging QGIS plugins
+* **qgis_plugin_tools** as a common QGIS plugin runtime library
+* Optional **GitHub Actions** workflows for tests, code style checks and releases
+* A **VS Code** workspace with recommended settings and extensions
+
+## Requirements
+
+* [QGIS](https://qgis.org/) >= 3.40 (QGIS 4 is also supported) with Python >= 3.12
+* [Git](https://git-scm.com/)
+* [uv](https://docs.astral.sh/uv/)
 
 ## Creating a new QGIS plugin project from the template
 
@@ -27,87 +37,102 @@ cd my-qgis-plugin
 git init
 ```
 
-Next, create a Python virtual environment which will also be used later in QGIS
-plugin development.
+### Setting up a virtual environment
+
+<details><summary>Set up a virtual environment</summary>
+
+The template is applied and the plugin is developed in a Python virtual
+environment that has access to the libraries provided by the QGIS installation.
+
+Install [uv](https://docs.astral.sh/uv/) if not already available
 
 On Linux:
 
-* Install [uv](https://docs.astral.sh/uv/) if not already available
 * Create a Python virtual environment with access to the libraries provided by
   the QGIS installation:
 
   ```bash
   uv venv .venv --system-site-packages
+  # to ensure correct python is used you can set env variable:
+  # UV_PYTHON=/usr/bin/python3 uv venv .venv --system-site-packages
   ```
 
 On Windows:
 
 * You can use the [qgis-venv-creator tool](https://github.com/GispoCoding/qgis-venv-creator)
   to make sure the virtual environment is configured correctly for QGIS
-* Install `uv` to the virtual environment:
 
-  ```bash
-  python -m pip install --upgrade pip
-  pip install uv
-  ```
+> [!NOTE]
+> if it is not possible to install uv globally, install it to virtual env
+>
+> ```bash
+> python -m pip install --upgrade pip
+> pip install uv
+>  ```
 
-Once the virtual environment is ready, activate it, install Copier (check the
-supported version in [copier.yml](copier.yml)), and run the following command:
+</details>
 
-```bash
-pip install copier
-copier copy --answers-file .copier-answers.qgis-plugin.yml https://github.com/osgeosuomi/qgis-plugin-copier-template.git .
-```
+### Running Copier
 
-The Copier tool will prompt you for the required values and use them to populate
-the template. If you want to modify your answers, rerun Copier with:
-
-```bash
-copier recopy --answers-file .copier-answers.qgis-plugin.yml .
-```
-
-After the template has been applied to the target repository, generate the lock
-file and install the project dependencies:
+After setting up a virtual environment in the folder,
+activate it and run Copier with `uvx` (check the supported version in
+[copier.yml](copier.yml)):
 
 ```bash
-uv sync
+uvx copier copy --answers-file .copier-answers.qgis-plugin.yml https://github.com/osgeosuomi/qgis-plugin-copier-template.git .
 ```
 
-Finally, see the `DEVELOPMENT.md` file in the target repository for instructions
-on setting up your QGIS plugin development environment.
+Copier prompts for the template questions and uses the
+answers to populate the template. Then
+[finish the setup](#after-applying-the-template).
 
 ## Applying the template to an existing project
 
-Add Copier (check the supported version in [copier.yml](copier.yml)) as
-a development dependency in the repository.
+If the repository does not have a virtual environment yet,
+[set one up](#setting-up-a-virtual-environment). Activate it and apply the
+template with the same command as for a new project:
 
-Apply the template files with the `copier copy` command. On the first run, the
-tool will prompt for required values.
+```bash
+uvx copier copy --answers-file .copier-answers.qgis-plugin.yml https://github.com/osgeosuomi/qgis-plugin-copier-template.git .
+```
 
 Use the `--answers-file` option and name the configuration file
 `.copier-answers.qgis-plugin.yml` so that other Copier templates
 (for example CI) can also be used in the same repository.
 
-```bash
-copier copy --answers-file .copier-answers.qgis-plugin.yml https://github.com/osgeosuomi/qgis-plugin-copier-template.git .
-```
-
 After answering the prompts, Copier will ask whether it can overwrite existing
 files (if any found). Answer **yes** to all prompts, then review the Git diff
-and check that repository-specific customizations are not removed.
+and check that repository-specific customizations are not removed. Then
+[finish the setup](#after-applying-the-template).
+
+## After applying the template
+
+Generate the lock file, install the project dependencies and the Git hooks:
+
+```bash
+uv lock --upgrade
+uv sync
+uv run prek install
+```
+
+See the `DEVELOPMENT.md` file in the target repository for instructions on
+setting up your QGIS plugin development environment.
 
 If you want to modify your answers, rerun Copier with:
 
 ```bash
-copier recopy --answers-file .copier-answers.qgis-plugin.yml .
+uvx copier recopy --answers-file .copier-answers.qgis-plugin.yml .
 ```
 
 ## Updating from the template
 
-When the template is updated, apply changes to the target repository with:
+When the template is updated, apply changes to the target repository and sync
+the environment with the updated dependencies:
 
 ```bash
 copier update --answers-file .copier-answers.qgis-plugin.yml --skip-answered
+uv lock --upgrade
+uv sync
 ```
 
 ## Using the template for a plugin component of a monorepo
@@ -117,7 +142,7 @@ workspace member) of a larger repository, and run Copier with the component
 directory as the destination:
 
 ```bash
-copier copy --answers-file .copier-answers.qgis-plugin.yml \
+uvx copier copy --answers-file .copier-answers.qgis-plugin.yml \
   https://github.com/osgeosuomi/qgis-plugin-copier-template.git components/plugin
 ```
 

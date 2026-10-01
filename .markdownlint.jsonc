@@ -7,5 +7,9 @@
     "heading_line_length": 80,
     // Include code blocks
     "code_blocks": false
+  },
+  // MD033/no-inline-html : Inline HTML : https://github.com/DavidAnson/markdownlint/blob/v0.41.1/doc/md033.md
+  "MD033": {
+    "allowed_elements": ["details", "summary"]
   }
 }
