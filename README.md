@@ -1,5 +1,8 @@
 # qgis-plugin-copier-template
 
+[![Copier](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/copier-org/copier/master/img/badge/badge-grayscale-inverted-border-purple.json)](https://github.com/copier-org/copier)
+[![prek](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/j178/prek/master/docs/assets/badge-v0.json)](https://github.com/j178/prek)
+
 This template provides a starting point for QGIS plugin development, including
 a working example plugin that can be used as a base when building your own functionality.
 
