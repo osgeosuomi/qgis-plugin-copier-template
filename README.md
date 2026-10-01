@@ -11,7 +11,7 @@ and best practices:
 
 * **uv** for dependency management
 * **Ruff** for code formatting and linting
-* **Mypy** for static type checking
+* **mypy** for static type checking
 * **Flake8** for additional code quality validation (including QGIS-specific checks)
 * **Pytest** setup for automated testing
 * **pre-commit** hooks for running quality checks before commits
@@ -32,12 +32,7 @@ plugin development.
 
 On Linux:
 
-* Install [uv](https://docs.astral.sh/uv/) if not already available:
-
-  ```bash
-  pip install uv
-  ```
-
+* Install [uv](https://docs.astral.sh/uv/) if not already available
 * Create a Python virtual environment with access to the libraries provided by
   the QGIS installation:
 
