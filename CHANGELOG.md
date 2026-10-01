@@ -2,6 +2,22 @@
 
 <!-- version list -->
 
+## v0.8.0 (2026-10-01)
+
+### Bug Fixes
+
+- **docs**: Fix uv install instructions
+  ([`2382b7c`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/2382b7c2895dba97f0912a069495baa12cb18622))
+
+### Features
+
+- **lint**: Add option to use ty for type checks
+  ([`88f4a5d`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/88f4a5de24620b321f5684c503d30c1ef14045f2))
+
+- **plugin**: Setup translators using qgis-plugin-tools
+  ([`24c1530`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/24c153035a8de1a425f34e365e7f25d0df1af3ca))
+
+
 ## v0.7.0 (2026-09-30)
 
 ### Bug Fixes
