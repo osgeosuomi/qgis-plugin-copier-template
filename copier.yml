@@ -135,6 +135,7 @@ _message_after_copy: |
 _message_after_update: |
   Sync the environment with the updated dependencies:
 
+      uv lock --upgrade
       uv sync
 
 _subdirectory: template

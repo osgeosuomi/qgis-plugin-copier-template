@@ -7,7 +7,7 @@ name = "{{ qgis_plugin_module | replace('_', '-') | lower }}"
 requires-python = ">={{ python_version }}"
 version = "0.0.0.post0"
 readme = "README.md"
-dependencies = ["qgis_plugin_tools"]
+dependencies = ["qgis_plugin_tools>=2.1.0"]
 
 [project.entry-points."qgis_plugin_dev_tools"]
 {{ qgis_plugin_module }} = "{{ qgis_plugin_module }}"
@@ -25,7 +25,7 @@ include = [
 
 [tool.qgis_plugin_dev_tools]
 plugin_package_name = "{{ qgis_plugin_module }}"
-runtime_requires = ["qgis_plugin_tools"]
+runtime_requires = ["qgis_plugin_tools>=2.1.0"]
 version_number_source = "pyproject"
 {%- if setup_translations %}
 translation_language_codes = ["{{ lang_key_for_translations }}"]
