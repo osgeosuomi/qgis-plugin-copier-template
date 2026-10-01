@@ -144,3 +144,18 @@ copier update --answers-file .copier-answers.qgis-plugin.yml --skip-answered
 ## Template development
 
 See [development readme](./docs/DEVELOPMENT.md).
+
+## Contributing
+
+Contributions are very welcome. Get started by reading OSGeo
+Suomi [CONTRIBUTING guidelines](https://github.com/osgeosuomi/.github/blob/main/CONTRIBUTING.md).
+
+## License
+
+qgis-plugin-copier-template is licensed under the GNU General Public License,
+version 2 or (at your option) any later version (`GPL-2.0-or-later`).
+See [LICENSE](LICENSE) for the full text of GPLv2. Every source file carries
+a license notice.
+
+By contributing to this project you agree that your contributions are
+licensed under the same terms.
