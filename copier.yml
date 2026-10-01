@@ -61,6 +61,19 @@ python_version:
   default: "3.12"
   when: false
 
+type_checking_library:
+  type: str
+  help: >-
+    Which type checking library should be used? Note that the ty tool
+    is very strict about type annotations and will likely require
+    the use of the `typing_utils` module from the qgis_plugin_tools library.
+  default: ty
+  choices:
+    mypy (QGIS imports not checked):
+      value: mypy
+    ty (strict, experimental):
+      value: ty
+
 plugin_metadata_author:
   type: str
   help: Who is the author of this plugin (written to metadata.txt)?

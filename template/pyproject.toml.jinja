@@ -57,7 +57,11 @@ lint = [
   # Linting and formatting (ensure precommit yaml has same versions)
   "prek>=0.5.3",
   "ruff==0.16.8",
+  {%- if type_checking_library == 'ty' %}
+  "ty==0.0.84",
+  {%- elif type_checking_library == 'mypy' %}
   "mypy==2.3.1",
+  {%- endif %}
   "flake8==7.4.1",
   "bandit==1.9.4",
   # flake8 plugins
@@ -66,10 +70,7 @@ lint = [
   "flake8-spellcheck==0.28.0",
   # Stubs for type checks
   {%- if qgis_version == 'QGIS3' %}
-  "PyQt5-stubs==5.15.6.0",
   "qgis-stubs==0.4.0",
-  {%- else %}
-  "PyQt6-stubs==20250824",
   {%- endif %}
 ]
 
@@ -105,7 +106,7 @@ lint.unfixable = [
 
 # Avoid flagging (and removing) `SC200` from any `# noqa`
 # directives, despite Ruff's lack of support for `flake8-spellcheck`.
-lint.external = ["SC200", {% if qgis_version == 'QGIS3' %}"QGS1"{% else %}"QGS"{% endif %}]
+lint.external = ["SC200", {% if qgis_version == 'QGIS3' %}"QGS1"{% elif qgis_version == 'QGIS3 & QGIS4' %}"QGS"{% endif %}]
 
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
@@ -136,7 +137,7 @@ known-first-party = ["{{ qgis_plugin_module }}"]
 max-line-length = 88
 spellcheck-targets = "names"
 dictionaries = "en_US,python,technical"
-select = ["SC", {% if qgis_version == 'QGIS3' %}"QGS1"{% else %}"QGS"{% endif %}]
+select = ["SC", {% if qgis_version == 'QGIS3' %}"QGS1"{% elif qgis_version == 'QGIS3 & QGIS4' %}"QGS"{% endif %}]
 per-file-ignores = [
   "test/*:SC200,QGS",
   "test_integration/*:SC200,QGS",
@@ -145,6 +146,19 @@ per-file-ignores = [
 
 [tool.bandit]
 exclude_dirs = ["test"]
+{%- if type_checking_library == 'ty' %}
+
+[tool.ty.environment]
+python-version = "{{ python_version }}"
+
+[tool.ty.rules]
+possibly-unresolved-reference = "warn"
+division-by-zero = "ignore"
+
+[tool.ty.analysis]
+# Imports from qgis.PyQt cannot be resolved
+replace-imports-with-any = ["qgis.PyQt.**"]
+{%- elif type_checking_library == 'mypy' %}
 
 [tool.mypy]
 python_version = "{{ python_version }}"
@@ -157,6 +171,7 @@ check_untyped_defs = true
 # qgis-stubs does not cover qgis.PyQt
 module = ["qgis.PyQt.*"]
 ignore_missing_imports = true
+{%- endif %}
 {%- endif %}
 
 [tool.pytest.ini_options]

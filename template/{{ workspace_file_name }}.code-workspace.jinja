@@ -6,7 +6,11 @@
             "mikestead.dotenv",
             "tamasfe.even-better-toml",
             "ms-python.python",
+            {%- if type_checking_library == 'ty' %}
+            "astral-sh.ty",
+            {%- elif type_checking_library == 'mypy' %}
             "ms-python.mypy-type-checker",
+            {%- endif %}
             "ms-python.flake8",
             "charliermarsh.ruff",
         ]
@@ -23,7 +27,11 @@
         // Linting
         "flake8.importStrategy": "fromEnvironment",
         "ruff.importStrategy": "fromEnvironment",
+        {%- if type_checking_library == 'ty' %}
+        "ty.disableLanguageServices": true,
+        {%- elif type_checking_library == 'mypy' %}
         "mypy-type-checker.importStrategy": "fromEnvironment",
+        {%- endif %}
         // Formatting
         "editor.formatOnSave": true,
         "[python]": {
