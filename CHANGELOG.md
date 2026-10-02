@@ -2,6 +2,26 @@
 
 <!-- version list -->
 
+## v0.8.1 (2026-10-02)
+
+### Bug Fixes
+
+- **lint**: Add PyQt stubs for type checks
+  ([`140886a`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/140886ab482cdd2d1b63d4d987b146e68aa5d5a9))
+
+- **lint**: Let mypy use the stubs shipped with QGIS
+  ([`4481d4a`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/4481d4a3f62ca28d6e5126ccae76424b8b7412d5))
+
+- **lint**: Remove qgis-stubs
+  ([`b8f7d3e`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/b8f7d3e09d179ea7dd0e4bc8b8d9bcb490aef19a))
+
+- **lint**: Remove ty's qgis.PyQt import workaround
+  ([`a7ae35e`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/a7ae35e5d34acd313087e3c1db2b2a1d8eb04403))
+
+- **lint**: Run mypy where QGIS is installed
+  ([`81ebd4f`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/81ebd4fabbcb0f24faea40c268c23079aefe2968))
+
+
 ## v0.8.0 (2026-10-01)
 
 ### Bug Fixes
