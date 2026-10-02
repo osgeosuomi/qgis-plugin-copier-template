@@ -71,9 +71,6 @@ lint = [
   # Stubs for type checks
   "PyQt5-stubs==5.15.6.0",
   "PyQt6-stubs==20250824",
-  {%- if qgis_version == 'QGIS3' %}
-  "qgis-stubs==0.4.0",
-  {%- endif %}
 ]
 
 [tool.ruff]
@@ -173,13 +170,6 @@ check_untyped_defs = true
 # QGIS ships .pyi stubs but no py.typed marker
 module = ["qgis.*"]
 follow_untyped_imports = true
-{%- if qgis_version == 'QGIS3' %}
-
-[[tool.mypy.overrides]]
-# qgis-stubs does not cover qgis.PyQt
-module = ["qgis.PyQt.*"]
-ignore_missing_imports = true
-{%- endif %}
 {%- endif %}
 
 [tool.pytest.ini_options]
