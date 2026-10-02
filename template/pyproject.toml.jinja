@@ -153,10 +153,6 @@ python-version = "{{ python_version }}"
 [tool.ty.rules]
 possibly-unresolved-reference = "warn"
 division-by-zero = "ignore"
-
-[tool.ty.analysis]
-# Imports from qgis.PyQt cannot be resolved
-replace-imports-with-any = ["qgis.PyQt.**"]
 {%- elif type_checking_library == 'mypy' %}
 
 [tool.mypy]
