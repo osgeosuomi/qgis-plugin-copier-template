@@ -69,7 +69,7 @@ type_checking_library:
     the use of the `typing_utils` module from the qgis_plugin_tools library.
   default: ty
   choices:
-    mypy (QGIS imports not checked):
+    mypy:
       value: mypy
     ty (strict, experimental):
       value: ty

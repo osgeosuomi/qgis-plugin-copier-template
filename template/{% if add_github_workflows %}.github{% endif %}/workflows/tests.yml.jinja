@@ -37,22 +37,14 @@ jobs:
       - name: Install venv
         run: |
           uv venv --system-site-packages
-      {%- if type_checking_library == 'ty' %}
 
       - name: Run type checks
         run: |
           uv sync --all-packages --locked --active
-          uv run ty check
+          uv run {{ 'ty check' if type_checking_library == 'ty' else 'mypy' }}
 
       - name: Run tests
         run: uv run pytest -v --qgis_disable_gui --cov --cov-report=xml
-      {%- elif type_checking_library == 'mypy' %}
-
-      - name: Run tests
-        run: |
-          uv sync --all-packages --no-group lint --locked --active
-          uv run pytest -v --qgis_disable_gui --cov --cov-report=xml
-      {%- endif %}
 
       - name: Check code coverage for changed lines
         if: {% raw %}${{ matrix.qgis-image-tag == '3.44-noble' }}{% endraw %}
