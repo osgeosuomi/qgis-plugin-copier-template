@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v0.8.2 (2026-10-22)
+
+### Bug Fixes
+
+- **ci**: Make processing importable in smoke test
+  ([`d2d8007`](https://github.com/osgeosuomi/qgis-plugin-copier-template/commit/d2d8007c221366831e88d88c80b9c89301d854e4))
+
+
 ## v0.8.1 (2026-10-02)
 
 ### Bug Fixes
